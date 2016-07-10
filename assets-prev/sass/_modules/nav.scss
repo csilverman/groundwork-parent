@@ -1,0 +1,61 @@
+@import "config";
+@import "_mixins/mixins";
+
+
+/*	NAVIGATION
+	------------------------------
+*/
+
+.ac-NavAnchor--menu {
+	position: absolute;
+	right: 0;
+	@include v-pixel-fallback("font-size", 2rem);
+	z-index: 2;
+}
+.u-NavSite__item {
+	font-family: $serif;
+	line-height: 110%;
+	font-weight: 100;
+}
+.u-NavSite__itemContainer .u-NavSite__itemContainer .u-NavSite__item {
+	@include v-pixel-fallback("font-size", 1.2rem);
+}
+.u-NavSite__itemContainer {
+	margin: 0;
+}
+.u-NavSite__itemContainer .u-NavSite__itemContainer {
+	padding-left: 0;
+}
+.u-NavSite__item {
+/*	padding: 2% 8%; */
+	margin-top: .25em;
+	margin-bottom: 0;
+}
+.u-NavSite__item:hover {
+	opacity: .6;
+}
+.u-NavSite__level--1 {
+	padding-left: 1em;
+}
+.u-NavSite__level--1 .u-NavSite__level {
+	padding-left: 8%;
+	border-left: 1px solid rgba(0,0,0,.1);
+}
+.ac-NavAnchor.ac-NavAnchor--top {
+	padding: 1em;
+	display: block;
+	text-align: center;
+}
+.u-NavSite__itemContainer {
+	font-size: 1.2em;
+}
+
+@media all and (min-width: $midway) {
+	.ac-NavAnchor.ac-NavAnchor--top {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		visibility: hidden;
+	}
+
+}

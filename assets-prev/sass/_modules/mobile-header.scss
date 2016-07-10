@@ -1,0 +1,41 @@
+@import "config";
+@import "_mixins/mixins";
+
+
+
+/*	MOBILE-HEADER
+	------------- */
+
+.ac-NavAnchor--menu {
+	@include v-pixel-fallback("right", .5rem);
+	@include v-pixel-fallback("top", .75rem);
+	left: auto;
+	position: absolute;
+}
+.u-Masthead__siteName {
+	@include v-pixel-fallback("margin-top", 2rem);
+	@include v-pixel-fallback("margin-bottom", 2rem);
+	text-align: center;
+}
+.u-Masthead__vassar {
+	position: absolute;
+	font-size: 1em;
+	@include v-pixel-fallback("top", 1rem);
+	@include v-pixel-fallback("left", 1rem);
+}
+@media screen and (min-width: $small) {
+	.u-Masthead__siteName {
+		text-align: left;
+		margin: 0;
+	}
+	.ac-NavAnchor {
+		display: none;
+	}
+	.icomoon-back:before {
+		content: "";
+	}
+	.u-Masthead__vassar {
+		position: static;
+		font-family: $serif;
+	}
+}
