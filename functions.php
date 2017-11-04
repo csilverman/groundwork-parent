@@ -68,13 +68,66 @@ function groundwork_widgets_init() {
 		'name'          => __( 'Sidebar', 'groundwork' ),
 		'id'            => 'sidebar-1',
 		'description'   => '',
-		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'before_widget' => '<aside id="%1$s" class="widget widget--side %2$s">',
 		'after_widget'  => '</aside>',
-		'before_title'  => '<h1 class="widget-title">',
+		'before_title'  => '<h1 class="widget__title">',
 		'after_title'   => '</h1>',
 	) );
 }
 add_action( 'widgets_init', 'groundwork_widgets_init' );
+
+/* Footer widget area */
+
+function groundwork_footerwidgets_init() {
+	register_sidebar( array(
+		'name'          => __( 'Footer-bar', 'groundwork' ),
+		'id'            => 'sidebar-2',
+		'description'   => '',
+		'before_widget' => '<aside id="%1$s" class="widget widget--footer %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget__title">',
+		'after_title'   => '</h1>',
+	) );
+}
+add_action( 'widgets_init', 'groundwork_footerwidgets_init' );
+
+
+function groundwork_hpsidebar_init() {
+	register_sidebar( array(
+		'name'          => __( 'HomepageSidebar', 'groundwork' ),
+		'id'            => 'sidebar-3',
+		'description'   => '',
+		'before_widget' => '<aside id="%1$s" class="widget hp--sidebar %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget__title">',
+		'after_title'   => '</h1>',
+	) );
+}
+
+function groundwork_hpprecontentbar_init() {
+	register_sidebar( array(
+		'name'          => __( 'HomepagePreContentBar', 'groundwork' ),
+		'id'            => 'sidebar-4',
+		'description'   => '',
+		'before_widget' => '<aside id="%1$s" class="widget hp__precontentbar--widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget__title">',
+		'after_title'   => '</h1>',
+	) );
+}
+
+
+
+if (HOMEPAGE__HAS_OWNSIDEBAR) {
+	add_action( 'widgets_init', 'groundwork_hpsidebar_init' );	
+}
+if (HOMEPAGE__HAS_PRECONTENTWIDGETS) {
+	add_action( 'widgets_init', 'groundwork_hpprecontentbar_init' );	
+}
+
+
+
+
 
 /**
  * Enqueue scripts and styles.
@@ -246,7 +299,8 @@ function jk_img_caption_shortcode_filter($val, $attr, $content = null)
 }
 add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
 
-
-
-
-
+function show_post($path) {
+  $post = get_page_by_path($path);
+  $content = apply_filters('the_content', $post->post_content);
+  echo $content;
+}

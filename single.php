@@ -27,7 +27,7 @@ get_header(); ?>
 	</div><!-- /u-lContent -->
 	
 <?php
-	if(HAS_SIDEBAR) {
+	if(SITE__HAS_SIDEBAR) {
 		get_sidebar();
 	}
 ?>

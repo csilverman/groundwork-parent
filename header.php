@@ -10,19 +10,20 @@
 
 <?php
 
-	$path = get_stylesheet_directory()."/_SETUP.php";
-	$path = str_replace("groundwork-child/", "", $path);
+/*	So here's what we need to do.
 	
-	//	This is the path to the main Groundwork theme
-	// $groundwork_path = get_template_directory_uri();
+	Groundwork Parent should have NOTHING site-specific about it. Currently, it contains
+	_SETUP. That's a problem. My goal here is to move _SETUP into the child theme. But
+	the parent theme needs to know where _SETUP is.
+
+	So: Grab the path to the currently active child theme. I've just proven that I can have
+	different WP sites share Groundwork Parent, but have different child themes active. This
+	is fucking marvelous.
+
+*/
 	
-//			/web/sites/people/chsilverman/foliotheme/wp-content/themes/groundwork-child/_SETUP.php
-//			/web/sites/people/chsilverman/foliotheme/wp-content/themes//_SETUP.php
-//	include("/web/sites/people/chsilverman/foliotheme/wp-content/themes/_SETUP.php");
-
-	include("/web/sites/people/chsilverman/foliotheme/wp-content/themes/groundwork-parent/_SETUP.php");
-
-// include($path."/_SETUP.php");
+$child_path = get_stylesheet_directory();
+include($child_path."/_SETUP.php");
 
 
 	/*	Build the class for whatever page we're on */
@@ -99,12 +100,14 @@
 	
 	<body>
 		<?php
-			include(INCLUDEPATH."googleanalytics.php");
+			include(INCLUDE_PATH."googleanalytics.php");
 		?>
 		<div class="u-lPageContent hfeed site">
 
-			<a class="ac-hiddenVisually ac-skipLink" href="#targetnavigation">skip to navigation (press enter key)</a>
-			<a class="ac-NavAnchor ac-NavAnchor--menu icomoon" href="#navigation">Menu</a>
+		<?php if(SITE__HAS_NAVIGATION) { ?>
+				<a class="ac-hiddenVisually ac-skipLink" href="#targetnavigation">skip to navigation (press enter key)</a>
+				<a class="ac-NavAnchor ac-NavAnchor--menu icomoon" href="#navigation">Menu</a>
+		<?php } ?>
 
 			<div class="u-lHeader" role="banner">
 				<header>

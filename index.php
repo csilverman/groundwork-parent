@@ -13,6 +13,20 @@
 
 get_header(); ?>
 
+	<?php if(HOMEPAGE__HAS_BLOGINTRO) { ?>
+		<div class="blogIntro">
+			<?php show_post("blogintro"); ?>
+		</div>
+	<?php } ?>
+
+	<?php if(HOMEPAGE__HAS_PRECONTENTWIDGETS) { ?>
+		<div class="widget-area hp__precontentbar" role="complementary">
+			<?php if ( ! dynamic_sidebar( 'sidebar-4' ) ) : ?>
+	
+			<?php endif; // end sidebar widget area ?>
+		</div><!-- /u-lAside -->
+	<?php } ?>
+
 	<div class="u-lContent">
 
 		<?php if ( have_posts() ) : ?>
@@ -60,11 +74,23 @@ get_header(); ?>
 
 	</div><!-- /u-lContent -->
 
-<?php
-	if(HAS_SIDEBAR) {
-		get_sidebar();
-	}
-?>
+
+	<?php if(HOMEPAGE__HAS_OWNSIDEBAR) $addtlClasses = "widget-area--hpsidebar"; ?>
+	
+		<div class="u-lAside widget-area <?php echo $addtlClasses; ?>" role="complementary">
+		<?php
+			if(HOMEPAGE__HAS_OWNSIDEBAR) { 
+				if ( ! dynamic_sidebar( 'sidebar-3' ) ) : ?>
+	
+			<?php endif; // end sidebar widget area ?>
+		
+		<?php }
+			else {
+				get_sidebar();
+			}
+		?>
+	</div><!-- /u-lAside -->
+
 <?php get_footer(); ?>
 
 

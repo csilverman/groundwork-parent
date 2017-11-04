@@ -17,7 +17,7 @@ if ( post_password_required() ) {
 	return;
 }
 ?>
-
+<?php if(SHOW_COMMENTS) { ?>
 <div id="comments" class="comments-area">
 
 	<?php // You can start editing here -- including this comment! ?>
@@ -101,3 +101,4 @@ comment_form($comment_args); ?>
 
 
 </div><!-- #comments -->
+<?php } ?>

@@ -5,8 +5,9 @@
  * @package groundwork
  */
 ?>
-	<div class="u-lAside widget-area" role="complementary">
+<?php if(SITE__HAS_SIDEBAR) { ?>
+	<div class="sidebar">
 		<?php if ( ! dynamic_sidebar( 'sidebar-1' ) ) : ?>
-
 		<?php endif; // end sidebar widget area ?>
-	</div><!-- /u-lAside -->
+	</div>
+<?php } ?>

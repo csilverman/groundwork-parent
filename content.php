@@ -114,19 +114,23 @@ if (is_singular()) $hTag = "h1";
 		<b class="post__metaItem post__dateContainer">
 		
 			<?php if(POST_DATELABEL_HIDDEN) {
-			$label_postDate_hidden = "hidden";
+			$label_postDate_hidden = "hide--visually";
 			} else $label_postDate_hidden = "";
 			?>
 		
 			<b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Posted on: </b>
 			<b class="post__date"><?php the_time('M d, Y'); ?></b>
 		</b>
-		<b class="post__metaItem post__catContainer">
-			<h2 class="label label--cats"><?php echo CATEGORY__HEADERTEXT; ?></h2>
-				<?php echo get_the_category_list(); ?>
-		</b>
 
-		<?php
+		<?php if(POST__SHOWCATEGORIES) { ?>
+			<b class="post__metaItem post__catContainer">
+				<h2 class="label label--cats"><?php echo CATEGORY__HEADERTEXT; ?></h2>
+					<?php echo get_the_category_list(); ?>
+			</b>
+		<?php } ?>
+
+
+		<?php if(POST__SHOWTAGS && !POST__TAGSBELOWPOST) {
 			$tags_list = get_the_tag_list( '', __( '', 'groundwork' ) );
 			if ( $tags_list ) :
 		?>
@@ -140,7 +144,8 @@ if (is_singular()) $hTag = "h1";
 				?>			
 			</ul>
 		</b>
-		<?php endif; ?>
+		<?php endif; } ?>
+
 
 		<?php if(SHOW_COMMENTS) { ?>
 		<b class="post__metaItem post__commentLinkContainer">
@@ -167,6 +172,27 @@ if (is_singular()) $hTag = "h1";
 			) );
 		?>
 	</div><!-- .entry-content -->
+
+	<?php if(POST__TAGSBELOWPOST) { ?>
+
+		<?php if(POST__SHOWTAGS) {
+			$tags_list = get_the_tag_list( '', __( '', 'groundwork' ) );
+			if ( $tags_list ) :
+		?>
+		<b class="post__metaItem post__tagsContainer">
+			<h2 class="label label--postTags"><?php echo TAG__HEADERTEXT; ?></h2>
+			<ul class="post__tags">
+				<?php
+				if(get_the_tag_list()) {
+				    echo get_the_tag_list('<li>','</li><li>','</li>');
+				}
+				?>			
+			</ul>
+		</b>
+		<?php endif; } ?>
+			
+	<?php } ?>
+
 	<?php endif; ?>
 	</article>
 </div><!-- #post-## -->

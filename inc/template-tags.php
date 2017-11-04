@@ -18,7 +18,7 @@ function groundwork_paging_nav() {
 	}
 	?>
 	<nav class="navigation pagingNav" role="navigation">
-		<h1 class="ac-hiddenVisually ac-navTitle"><?php _e( 'Posts navigation', 'groundwork' ); ?></h1>
+		<h1 class="hide--visually ac-hiddenVisually ac-navTitle"><?php _e( 'Posts navigation', 'groundwork' ); ?></h1>
 		<div class="pagingNav__container">
 
 			<?php if ( get_next_posts_link() ) : ?>
