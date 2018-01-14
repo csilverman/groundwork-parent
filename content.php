@@ -97,7 +97,11 @@ if (is_singular()) $hTag = "h1";
 
 		</header>
 	</div><!-- .entry-header -->
-	<div class="post__meta">
+
+	<?php if(POST__GROUP_METADATA) { ?>
+		<div class="post__meta">
+	<?php } ?>
+
 		<?php if(SHOW_AUTHORS) { ?>
 			<b class="post__metaItem post__authorContainer">
 				<?php if(AUTHOR__SHOWAVATAR) { ?>
@@ -156,7 +160,12 @@ if (is_singular()) $hTag = "h1";
 		<?php } ?>
 		
 		<?php edit_post_link( __( 'Edit', 'groundwork' ), '<b class="post__edit">', '</b>' ); ?>
-	</div><!-- post__meta -->
+
+
+	<?php if(POST__GROUP_METADATA) { ?>
+		</div><!-- post__meta -->
+	<?php } ?>
+
 
 	<?php if ( is_search() ) : // Only display Excerpts for Search ?>
 	<div class="entry__summary">
