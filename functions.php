@@ -241,6 +241,16 @@ function specialDateFormatArray() {
 	}
 }
 
+//	https://gretathemes.com/guides/remove-category-title-category-pages/
+function prefix_category_title( $title ) {
+    if ( is_category() ) {
+        $title = single_cat_title( '', false );
+    }
+    return $title;
+}
+add_filter( 'get_the_archive_title', 'prefix_category_title' );
+
+
 add_filter('get_archives_link', 'translate_archive_month');
 function translate_archive_month($list) {
 
