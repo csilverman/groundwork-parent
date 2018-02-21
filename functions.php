@@ -5,6 +5,14 @@
  * @package groundwork
  */
  
+/*
+ * Enable support for Post Thumbnails on posts and pages.
+ *
+ * @link http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails
+ */
+add_theme_support( 'post-thumbnails' );
+
+ 
 if ( ! function_exists( 'groundwork_setup' ) ) :
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -25,13 +33,6 @@ function groundwork_setup() {
 
 	// Add default posts and comments RSS feed links to head.
 	add_theme_support( 'automatic-feed-links' );
-
-	/*
-	 * Enable support for Post Thumbnails on posts and pages.
-	 *
-	 * @link http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails
-	 */
-	//add_theme_support( 'post-thumbnails' );
 
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(

@@ -7,9 +7,13 @@
 
 
 
+<?php
 
+$morePostClasses = "";
 
-<div id="post-<?php the_ID(); ?>" <?php post_class("post post--".$post->post_name); ?>>
+?>
+
+<div id="post-<?php the_ID(); ?>" <?php post_class("post post--".$post->post_name." ".$morePostClasses); ?>>
 
 <?php $post__subdesc = get_post_meta($post->ID, 'subdesc', true); ?>
 
@@ -165,7 +169,18 @@ if (is_singular()) $hTag = "h1";
 	<?php if(POST__GROUP_METADATA) { ?>
 		</div><!-- post__meta -->
 	<?php } ?>
-
+	<?php
+	 if ( has_post_thumbnail()) {
+	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large');
+	    
+	    ?>
+	    
+	    <div class="post__image">
+		    <a class="post__imageLink" href="<?php the_permalink(); ?>"><img src="<?php echo $large_image_url[0]; ?>"></a>
+	    </div>
+	    <?php
+	 }
+	 ?>
 
 	<?php if ( is_search() ) : // Only display Excerpts for Search ?>
 	<div class="entry__summary">

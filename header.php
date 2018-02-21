@@ -99,9 +99,16 @@ include($child_path."/_SETUP.php");
 	</head>
 	
 	<body>
-		<?php
-			include(INCLUDE_PATH."googleanalytics.php");
-		?>
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		
+		  ga('create', '<?php echo SITE__GOOGLEANALYTICS_CODE; ?>', 'auto');
+		  ga('send', 'pageview');
+		
+		</script>
 		<div class="u-lPageContent hfeed site">
 
 		<?php if(SITE__HAS_NAVIGATION) { ?>
