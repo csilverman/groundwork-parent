@@ -10,6 +10,7 @@
 <?php
 
 $morePostClasses = "";
+$morePostClasses .= formatPostClasses(get_post_meta($post->ID, 'post__classes', true));
 
 ?>
 
@@ -177,6 +178,9 @@ if (is_singular()) $hTag = "h1";
 	    
 	    <div class="post__image">
 		    <a class="post__imageLink" href="<?php the_permalink(); ?>"><img src="<?php echo $large_image_url[0]; ?>"></a>
+		    <?php if ( $caption = get_post( get_post_thumbnail_id() )->post_excerpt ) : ?>
+    <p class="caption"><?php echo $caption; ?></p>
+<?php endif; ?>
 	    </div>
 	    <?php
 	 }

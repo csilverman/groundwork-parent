@@ -311,7 +311,27 @@ function jk_img_caption_shortcode_filter($val, $attr, $content = null)
 add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
 
 function show_post($path) {
-  $post = get_page_by_path($path);
-  $content = apply_filters('the_content', $post->post_content);
-  echo $content;
+	$post = get_page_by_path($path);
+	$content = apply_filters('the_content', $post->post_content);
+	echo $content;
 }
+function formatPostClasses($classes) {
+	/*	This accepts a series of space-delimited classes (class1 class2)
+		and returns them BEM-formatted (post--class1 post--class2)
+	*/
+	$classes = explode(" ", $classes);
+	for ($i=0;$i<count($classes);$i++) {
+		$final_classes .= " post--".$classes[$i];
+	}
+	return $final_classes;
+}
+
+
+
+
+
+
+
+
+
+
