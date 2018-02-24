@@ -192,7 +192,7 @@ if (is_singular()) $hTag = "h1";
 	</div><!-- .entry-summary -->
 	<?php else : ?>
 	<div class="entry__content">
-		<?php the_content( __( 'More', 'groundwork' ) ); ?>
+		<?php the_content( __( POST__READMORE_TEXT, 'groundwork' ) ); ?>
 		<?php
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . __( 'Pages:', 'groundwork' ),

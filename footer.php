@@ -8,8 +8,6 @@
  */
 ?>
 
-<?php include("_SETUP.php"); ?>
-
 	</div> <!-- /u-lMain -->
 
 

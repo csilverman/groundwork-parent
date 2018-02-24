@@ -9,18 +9,6 @@
 ?><!DOCTYPE html>
 
 <?php
-
-/*	So here's what we need to do.
-	
-	Groundwork Parent should have NOTHING site-specific about it. Currently, it contains
-	_SETUP. That's a problem. My goal here is to move _SETUP into the child theme. But
-	the parent theme needs to know where _SETUP is.
-
-	So: Grab the path to the currently active child theme. I've just proven that I can have
-	different WP sites share Groundwork Parent, but have different child themes active. This
-	is fucking marvelous.
-
-*/
 	
 $child_path = get_stylesheet_directory();
 include($child_path."/_SETUP.php");
@@ -48,7 +36,7 @@ include($child_path."/_SETUP.php");
 
 	global $wp_query;
 	$postid = $wp_query->post->ID;
-	$customFieldClasses = get_post_meta($postid, "htmlClasses", true);
+	$customFieldClasses = get_post_meta($postid, "html__classes", true);
 	wp_reset_query();
 	
 	
