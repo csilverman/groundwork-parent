@@ -14,46 +14,65 @@ $child_path = get_stylesheet_directory();
 include($child_path."/_SETUP.php");
 
 
-	/*	Build the class for whatever page we're on */
-	
-	function theSlug() {
-		if(SITE__CUSTOM_CLASS_FOR_EACH_PAGE) {
-			if ( is_home() ) {
-				$theSlug = false;
+$html__classes = "";
+
+//	First, add post categories to the class list
+//	But only if we're on a post page
+
+
+if ( (is_single()) {
+	global $post;
+	$category = get_the_category($post->ID);
+	for ($i=0;$i<count($category);$i++) {
+		$html__classes .= " cat--".$category[$i]->name;	
+	}
+}
+
+//	Then add classes for whatever page we're on
+
+function theSlug() {
+	if(SITE__CUSTOM_CLASS_FOR_EACH_PAGE) {
+		if ( is_home() ) {
+			$theSlug = false;
+		}
+		else {
+			global $post;
+			$theSlug = get_post( $post )->post_name;
+			if ( is_page() ) {
+				$theSlug = "page--".$theSlug;
+			} else {
+				$theSlug = "post--".$theSlug;
 			}
-			else {
-				global $post;
-				$theSlug = get_post( $post )->post_name;
-				if ( is_page() ) {
-					$theSlug = "page--".$theSlug;
-				} else {
-					$theSlug = "post--".$theSlug;
-				}
-				return $theSlug;
-			}
+			return $theSlug;
 		}
 	}
+}
 
-	global $wp_query;
-	$postid = $wp_query->post->ID;
-	$customFieldClasses = get_post_meta($postid, "html__classes", true);
-	wp_reset_query();
-	
-	
-	/*	Do the following:
-		 - Find out what Wordpress function generates a path
-		 	to the main Groundwork theme
-		 - Set this up as the groundwork_path variable
-		 - Get the custom class toggle working.
-	
-	*/
-	
-	// include($groundwork_path."/add-ons/customPostClass.php");
-	
+$html__classes .= " ".theSlug();
+
+
+//	Now add any classes the user specified in custom fields
+
+global $wp_query;
+$postid = $wp_query->post->ID;
+$html__classes .= " ".get_post_meta($postid, "html__classes", true);
+wp_reset_query();
+
+
+/*	Do the following:
+	 - Find out what Wordpress function generates a path
+	 	to the main Groundwork theme
+	 - Set this up as the groundwork_path variable
+	 - Get the custom class toggle working.
+
+*/
+
+// include($groundwork_path."/add-ons/customPostClass.php");
+
 
 ?>
 
-<html <?php language_attributes(); ?> <?php body_class("no-js ".$customFieldClasses." ".theSlug()); ?> <body>
+<html <?php language_attributes(); ?> <?php body_class("no-js ".$html__classes); ?> <body>
 	<head>
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
