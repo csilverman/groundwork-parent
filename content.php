@@ -172,7 +172,7 @@ if (is_singular()) $hTag = "h1";
 	<?php } ?>
 	<?php
 	 if ( has_post_thumbnail()) {
-	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large');
+	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), POST__FEATUREDIMAGE_SIZE);
 	    
 	    ?>
 	    
