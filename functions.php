@@ -117,6 +117,20 @@ function groundwork_hpprecontentbar_init() {
 	) );
 }
 
+function groundwork_inloopcontent_init() {
+	register_sidebar( array(
+		'name'          => __( 'HomepageInLoopContent', 'groundwork' ),
+		'id'            => 'in-loop-content',
+		'description'   => '',
+		'before_widget' => '<aside id="%1$s" class="widget hp__inloopcontent--widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget__title">',
+		'after_title'   => '</h1>',
+	) );
+}
+if (HOMEPAGE__HAS_INLOOPCONTENT) {
+	add_action( 'widgets_init', 'groundwork_inloopcontent_init' );	
+}
 
 
 if (HOMEPAGE__HAS_OWNSIDEBAR) {
@@ -325,6 +339,12 @@ function formatPostClasses($classes) {
 	}
 	return $final_classes;
 }
+function exclude_category( $query ) {
+if ( $query->is_home() && $query->is_main_query() ) {
+$query->set( 'cat', HOMEPAGE__EXCLUDE_CATEGORIES );
+}
+}
+add_action( 'pre_get_posts', 'exclude_category' );
 
 
 

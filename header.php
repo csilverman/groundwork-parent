@@ -14,7 +14,7 @@ $child_path = get_stylesheet_directory();
 include($child_path."/_SETUP.php");
 
 
-$html__classes = "";
+$html__classes = "wp";
 
 //	First, add post categories to the class list
 //	But only if we're on a post page
@@ -116,6 +116,13 @@ wp_reset_query();
 
   gtag('config', '<?php echo SITE__GOOGLEANALYTICS_CODE; ?>');
 </script>
+
+			<?php if(SITE__UNIBAR) { ?>
+				<div class="universal-header">
+					<?php include(SITE__UNIBAR); ?>
+				</div>
+			<?php } ?>
+		</div>
 		<div class="u-lPageContent hfeed site">
 
 		<?php if(SITE__HAS_NAVIGATION) { ?>

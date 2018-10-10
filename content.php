@@ -131,6 +131,14 @@ if (is_singular()) $hTag = "h1";
 			<b class="post__date"><?php the_time('M d, Y'); ?></b>
 		</b>
 
+		<?php if(POST__SHOWDATEMODIFIED) { ?>
+			<b class="post__metaItem post__dateModifiedContainer">
+				<b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Modified on: </b>
+				<b class="post__date"><?php echo $post->post_modified; ?></b>
+			</b>
+		<?php } ?>
+
+
 		<?php if(POST__SHOWCATEGORIES) { ?>
 			<b class="post__metaItem post__catContainer">
 				<h2 class="label label--cats"><?php echo CATEGORY__HEADERTEXT; ?></h2>

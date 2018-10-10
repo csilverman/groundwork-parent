@@ -63,9 +63,21 @@ function groundwork_post_nav() {
 					$prevpost_text = POST__NAV_PREVTITLE;
 					$nextpost_text = POST__NAV_NEXTTITLE;
 				}
-			
-				previous_post_link( '<div class="postNav__navItem navItem--previous postNav__previous">%link</div>', _x( $prevpost_text, 'Previous post link', 'groundwork' ) );
-				next_post_link(     '<div class="postNav__navItem navItem--next postNav__next">%link</div>',     _x( $nextpost_text, 'Next post link',     'groundwork' ) );
+			?>			
+	
+			<div class="postNav__navItem navItem--previous postNav__previous">
+				<?php echo get_previous_post_link('%link', '<b class="prevnext__title">Previous</b><b class="prevnext__name">%title</b>'); ?>
+			</div>
+			<div class="postNav__navItem navItem--next postNav__next">			
+				<?php echo get_next_post_link('%link', '<b class="prevnext__title">Next</b><b class="prevnext__name">%title</b>'); ?>
+			</div>
+		
+
+<?php 
+/*				previous_post_link( '<div class="postNav__navItem navItem--previous postNav__previous">%link</div>', _x( $prevpost_text, 'Previous post link', 'groundwork' ) );
+				
+				next_post_link(     '<div class="postNav__navItem navItem--next postNav__next">%link</div>',     _x( $nextpost_text, 'Next post link',     'groundwork' ) ); */
+				
 			?>
 		</div><!-- .nav-links -->
 	</div><!-- .navigation -->
