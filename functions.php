@@ -141,8 +141,16 @@ if (HOMEPAGE__HAS_PRECONTENTWIDGETS) {
 }
 
 
-
-
+//	https://colorlib.com/wp/load-wordpress-jquery-from-google-library/
+function replace_jquery() {
+	if (!is_admin()) {
+		// comment out the next two lines to load the local copy of jQuery
+		wp_deregister_script('jquery');
+		wp_register_script('jquery', get_template_directory_uri() . '/js/libraries/jquery.min.js', false, '1.11.3');
+		wp_enqueue_script('jquery');
+	}
+}
+add_action('init', 'replace_jquery');
 
 /**
  * Enqueue scripts and styles.
@@ -150,14 +158,12 @@ if (HOMEPAGE__HAS_PRECONTENTWIDGETS) {
 function groundwork_scripts() {
 	wp_enqueue_style( 'groundwork-style', get_stylesheet_uri() );
 
-	wp_enqueue_script( 'groundwork-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20120206', true );
 
-	wp_enqueue_script( 'groundwork-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20130115', true );
+    wp_enqueue_script( 'waypoints', get_template_directory_uri() . '/js/libraries/jquery.waypoints.min.js',  array( 'jquery' ) ); 
+    wp_enqueue_script( 'custom-name', get_stylesheet_directory_uri() . '/assets/js/site.js',  array( 'jquery' ) ); 
 
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
 }
+
 add_action( 'wp_enqueue_scripts', 'groundwork_scripts' );
 
 /**
@@ -267,20 +273,21 @@ add_filter( 'get_the_archive_title', 'prefix_category_title' );
 
 
 add_filter('get_archives_link', 'translate_archive_month');
+
 function translate_archive_month($list) {
 
-  $patterns = array( 
-    '/January/', '/February/', '/March/', '/April/', '/May/', '/June/',
-    '/July/', '/August/', '/September/', '/October/',  '/November/', '/December/'
-  );
-
-  $replacements = array( //PUT HERE WHATEVER YOU NEED
-    '01.', '02.', '03.', '04.', '05.', '06.', 
-    '07.', '08.', '09.', '10.', '11.', '12.'
-  );    
-
-  $list = preg_replace($patterns, $replacements, $list);
-return $list; 
+	$patterns = array( 
+	'/January/', '/February/', '/March/', '/April/', '/May/', '/June/',
+	'/July/', '/August/', '/September/', '/October/',  '/November/', '/December/'
+	);
+	
+	$replacements = array( //PUT HERE WHATEVER YOU NEED
+	'01.', '02.', '03.', '04.', '05.', '06.', 
+	'07.', '08.', '09.', '10.', '11.', '12.'
+	);    
+	
+	$list = preg_replace($patterns, $replacements, $list);
+	return $list; 
 }
 
 
@@ -329,6 +336,7 @@ function show_post($path) {
 	$content = apply_filters('the_content', $post->post_content);
 	echo $content;
 }
+
 function formatPostClasses($classes) {
 	/*	This accepts a series of space-delimited classes (class1 class2)
 		and returns them BEM-formatted (post--class1 post--class2)
@@ -339,10 +347,11 @@ function formatPostClasses($classes) {
 	}
 	return $final_classes;
 }
+
 function exclude_category( $query ) {
-if ( $query->is_home() && $query->is_main_query() ) {
-$query->set( 'cat', HOMEPAGE__EXCLUDE_CATEGORIES );
-}
+	if ( $query->is_home() && $query->is_main_query() ) {
+		$query->set( 'cat', HOMEPAGE__EXCLUDE_CATEGORIES );
+	}
 }
 add_action( 'pre_get_posts', 'exclude_category' );
 

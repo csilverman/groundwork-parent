@@ -16,7 +16,10 @@ $morePostClasses .= formatPostClasses(get_post_meta($post->ID, 'post__classes', 
 
 <div id="post-<?php the_ID(); ?>" <?php post_class("post post--".$post->post_name." ".$morePostClasses); ?>>
 
-<?php $post__subdesc = get_post_meta($post->ID, 'subdesc', true); ?>
+<?php 
+	$post__subdesc = get_post_meta($post->ID, 'subdesc', true); 
+	$post__styling = get_post_meta($post->ID, 'hp-styling', true);
+?>
 
 <?php
 
@@ -80,11 +83,17 @@ $hTag = "h2";
 if (is_singular()) $hTag = "h1";
 
 ?>
-
+	<style>
+		<?php echo ".post--".$post->post_name." {".$post__styling."}"; ?>
+		
+	</style>
 	<article>
 	<div class="post__header">
 		<header>
-		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>"><a class="post__titleLink" href="<?php the_permalink(); ?>" rel="bookmark">
+		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>">
+			<?php if(!is_single()) { ?>
+				<a class="post__titleLink" href="<?php the_permalink(); ?>" rel="bookmark">
+			<?php } ?>
 		
 		<?php if($makePostTitleTheCategoryTitle) {
 				echo $categoryTitle;
@@ -94,7 +103,9 @@ if (is_singular()) $hTag = "h1";
 				the_title();
 			}
 			?>
-			</a>
+			<?php if(!is_single()) { ?>
+				</a>
+			<?php } ?>
 		</<?php echo $hTag; ?>>
 
 
@@ -122,12 +133,11 @@ if (is_singular()) $hTag = "h1";
 		<?php } ?>
 		<b class="post__metaItem post__dateContainer">
 		
-			<?php if(POST_DATELABEL_HIDDEN) {
-			$label_postDate_hidden = "hide--visually";
-			} else $label_postDate_hidden = "";
-			?>
-		
-			<b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Posted on: </b>
+			<?php if(POST_DATELABEL === false) {
+				$label_postDate_hidden = "hide--visually";
+			} else { 
+			?><b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Posted on: </b><?php } ?>
+			
 			<b class="post__date"><?php the_time('M d, Y'); ?></b>
 		</b>
 
@@ -185,7 +195,9 @@ if (is_singular()) $hTag = "h1";
 	    ?>
 	    
 	    <div class="post__image">
-		    <a class="post__imageLink" href="<?php the_permalink(); ?>"><img src="<?php echo $large_image_url[0]; ?>"></a>
+		    <?php if(!is_single()) { ?><a class="post__imageLink" href="<?php the_permalink(); ?>"><?php } ?>
+			    <img src="<?php echo $large_image_url[0]; ?>">
+		    <?php if(!is_single()) { ?></a><?php } ?>
 		    <?php if ( $caption = get_post( get_post_thumbnail_id() )->post_excerpt ) : ?>
     <p class="caption"><?php echo $caption; ?></p>
 <?php endif; ?>
@@ -193,8 +205,12 @@ if (is_singular()) $hTag = "h1";
 	    <?php
 	 }
 	 ?>
-
-	<?php if ( is_search() ) : // Only display Excerpts for Search ?>
+	 
+	 <?php
+		  if((BLOG__EXCPT_ON_HOME) && is_home()) $only_show_excerpt_on_home = true;
+	 ?>
+	<?php if ( (is_search() || is_archive())
+		 || $only_show_excerpt_on_home) : // Only display Excerpts for Search ?>
 	<div class="entry__summary">
 		<?php the_excerpt(); ?>
 	</div><!-- .entry-summary -->
