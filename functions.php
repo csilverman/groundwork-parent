@@ -1,4 +1,8 @@
 <?php
+
+$child_path = get_stylesheet_directory();
+include($child_path."/_SETUP.php");
+
 /**
  * groundwork functions and definitions
  *
@@ -240,6 +244,29 @@ function remove_more_jump_link($link) {
 add_filter('the_content_more_link', 'remove_more_jump_link');
 
 
+
+function socialcard($arr) {
+	foreach ($arr as $key => $value) {
+		$markup .= PHP_EOL;
+		
+		//	Some values appear in both Facebook and Twitter tags
+		//	Let's deal with those first
+		if (strpos($key, 'image') !== false) 
+			$markup .= '<meta name="twitter:image" content="'.$value.'">'.PHP_EOL.'<meta property="og:image" content="'.$value.'">';
+		if (strpos($key, 'title') !== false) 
+			$markup .= '<meta name="twitter:title" content="'.$value.'">'.PHP_EOL.'<meta property="og:title" content="'.$value.'">';
+		if (strpos($key, 'description') !== false) 
+			$markup .= '<meta name="twitter:description" content="'.$value.'">'.PHP_EOL.'<meta property="og:description" content="'.$value.'">';
+
+
+		//	Network-specific stuff here
+		if (strpos($key, 'twitter') !== false)
+			$markup .= '<meta name="'.$key.'" content="@'.$value.'">';
+		else if (strpos($key, 'og:') !== false)
+			$markup .= '<meta property="'.$key.'" content="'.$value.'">';
+	}
+    return $markup;
+}
 
 function specialDateFormatArray() {
 	if (CAT__USE_SPECIAL_DATE_FORMAT) {

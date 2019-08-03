@@ -18,7 +18,6 @@ $morePostClasses .= formatPostClasses(get_post_meta($post->ID, 'post__classes', 
 
 <?php 
 	$post__subdesc = get_post_meta($post->ID, 'subdesc', true); 
-	$post__styling = get_post_meta($post->ID, 'hp-styling', true);
 ?>
 
 <?php
@@ -80,13 +79,32 @@ if(POST__ENABLE_SUBTITLES) {
 	should be an h1. This determines what that tag is. */
 	
 $hTag = "h2";
+
+?>
+
+<?php
+	if(is_home()) {
+		$hp_post__styling = get_post_meta($post->ID, 'hp-post-styling', true);
+		$hp_more_css = get_post_meta($post->ID, 'hp-more-css', true);
+
+		echo '<style>';
+
+		/*	First thing: styles applied to this post specifically. That'll typically be CSS variables, although you can include other things like background-size, if you've applied an image to the post background. Anything in 	hp-post-styling automatically appears inside a selector targeting that specific post. You can't add any selectors to this field, only rules.
+		*/	
+		echo ".post--".$post->post_name." {".$hp_post__styling."}";
+
+		/*	If you want to do more styling to a post - targeting selectors other than the post container itself - use the hp-more-css field. Anything can go in there. Typically, this should be styling that applies to the post it's attached to. You could use this for changing the background color on the title, or other adjustments that are more complicated than styling the basic container selector.
+		*/
+		echo $hp_more_css;
+		echo '</style>';
+	}
+
+
+?>
+<?php
 if (is_singular()) $hTag = "h1";
 
 ?>
-	<style>
-		<?php echo ".post--".$post->post_name." {".$post__styling."}"; ?>
-		
-	</style>
 	<article>
 	<div class="post__header">
 		<header>

@@ -9,54 +9,8 @@
 ?><!DOCTYPE html>
 
 <?php
-	
-$child_path = get_stylesheet_directory();
-include($child_path."/_SETUP.php");
+include('inc/html-classes.php');
 
-$html__classes = "wp";
-
-//	First, add post categories to the class list
-//	But only if we're on a post page
-
-if (is_single()) {
-	global $post;
-	$category = get_the_category($post->ID);
-	for ($i=0;$i<count($category);$i++) {
-		$html__classes .= " cat--".$category[$i]->name;	
-	}
-}
-
-//	Then add classes for whatever page we're on
-
-function theSlug() {
-	if(SITE__CUSTOM_CLASS_FOR_EACH_PAGE) {
-		if ( is_home() ) {
-			$theSlug = false;
-		}
-		else {
-			global $post;
-			$theSlug = get_post( $post )->post_name;
-			if ( is_page() ) {
-				$theSlug = "page--".$theSlug;
-			} else {
-				$theSlug = "post--".$theSlug;
-			}
-			return $theSlug;
-		}
-	}
-}
-
-$html__classes .= " ".theSlug();
-
-
-//	Now add any classes the user specified in custom fields
-
-if (is_single()) {
-	global $wp_query;
-	$postid = $wp_query->post->ID;
-	$html__classes .= " ".get_post_meta($postid, "html__classes", true);
-	wp_reset_query();
-}
 
 //	Determine whether site title should be an h1 or not
 
@@ -82,16 +36,47 @@ function h1_or_not() {
 
 <html <?php language_attributes(); ?> <?php body_class("no-js ".$html__classes); ?> <body>
 	<head>
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo SITE__GOOGLEANALYTICS_CODE; ?>"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '<?php echo SITE__GOOGLEANALYTICS_CODE; ?>');
+</script>
+
 		
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title><?php wp_title( '|', true, 'right' ); ?></title>
 
 		<link rel="profile" href="http://gmpg.org/xfn/11">
-		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">						
-				
-		<!-- webtype goes here -->
-		<?php echo get_post_meta($post->ID, "webtype", true); ?>
+		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">			
+
+<?php
+
+global $post;
+$page_id = $post->ID;
+if ( has_post_thumbnail( $page_id ) ) :
+    $image_array = wp_get_attachment_image_src( get_post_thumbnail_id( $page_id ), 'optional-size' );
+    $image = $image_array[0];
+else :
+    $image = get_template_directory_uri() . '/images/default-background.jpg';
+endif;
+		
+$og_obj = array(
+	"image" => $image,
+	"title" => get_the_title($page_id),
+	"twitter:username" => "_csilverman",
+	"og:url" => get_permalink($page_id),
+	"description" => get_the_excerpt($page_id)
+);
+
+
+echo socialcard($og_obj);
+?>			
 
 			<link href="<?php echo get_template_directory_uri(); ?>/assets/css/site.css" rel="stylesheet" />
 
@@ -103,13 +88,17 @@ function h1_or_not() {
 				if($post__custom_styling) { ?>
 				
 				<style type="text/css">
+					<?php include('inc/webfonts.php'); ?>		
 					<?php echo $post__custom_styling; ?>
+
 				</style>
 
 		<?php }
 			}
 		?>
-		
+<!-- webtype goes here -->
+<?php echo get_post_meta($post->ID, "webtype", true); ?>
+
 		
 		
 		<!-- custom post CSS file goes here -->
@@ -117,18 +106,6 @@ function h1_or_not() {
 	</head>
 	
 	<body>
-		
-		
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59989151-4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', '<?php echo SITE__GOOGLEANALYTICS_CODE; ?>');
-</script>
-
 			<?php if(SITE__UNIBAR) { ?>
 				<div class="universal-header">
 					<?php include(SITE__UNIBAR); ?>
@@ -153,7 +130,7 @@ function h1_or_not() {
 							<?php } ?>
 
 							<?php if(HEADER__USE_INCLUDE) { ?>
-								<?php include("/app/public/wp/wp-content/themes/csi-notes/svg-logo.php"); ?>
+								<?php include("/app/public/wp-content/themes/csi-notes/svg-logo.php"); ?>
 							<?php } ?>
 							
 
