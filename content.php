@@ -35,23 +35,29 @@ $dateFormat = '';
 /*	The following arrays contain the IDs of categories
 	with specific requirements. */
 
-$catsWithEponymousPostTitles = explode(",", CAT__USE_NAME_OF_CAT_AS_HEADER);
-$catsWithSpecialDateFormat = specialDateFormatArray();
+if (CAT__USE_NAME_OF_CAT_AS_HEADER) {
+	$catsWithEponymousPostTitles = explode(",", CAT__USE_NAME_OF_CAT_AS_HEADER);
+	$catsWithSpecialDateFormat = specialDateFormatArray();
 
-$categories = get_the_category();
-if($categories){
-	foreach($categories as $category) {
-		$thisPostsCategory = $category->term_id;
-		if(in_array($thisPostsCategory, $catsWithEponymousPostTitles)) {
-			$makePostTitleTheCategoryTitle = true;
-			$categoryTitle = $category->cat_name;
-		}
-		if(array_key_exists($thisPostsCategory, $catsWithSpecialDateFormat)) {
-			$dateFormat = $catsWithSpecialDateFormat[$thisPostsCategory];
+	
+	$categories = get_the_category();
+
+	if($categories){
+		foreach($categories as $category) {
+			$thisPostsCategory = $category->term_id;
+
+			if(in_array($thisPostsCategory, $catsWithEponymousPostTitles)) {
+				$makePostTitleTheCategoryTitle = true;
+				$categoryTitle = $category->cat_name;
+			}
+			if ($catsWithSpecialDateFormat) {
+				if(array_key_exists($thisPostsCategory, $catsWithSpecialDateFormat)) {
+					$dateFormat = $catsWithSpecialDateFormat[$thisPostsCategory];
+				}
+			}
 		}
 	}
 }
-
 ?>
 
 
@@ -106,8 +112,7 @@ if (is_singular()) $hTag = "h1";
 
 ?>
 	<article>
-	<div class="post__header">
-		<header>
+		<header class="post__header">
 		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>">
 			<?php if(!is_single()) { ?>
 				<a class="post__titleLink" href="<?php the_permalink(); ?>" rel="bookmark">
@@ -130,7 +135,6 @@ if (is_singular()) $hTag = "h1";
 		<?php if ($post__subdesc) { ?><p class="post__subdesc"><?php echo $post__subdesc."</p>"; } ?>
 
 		</header>
-	</div><!-- .entry-header -->
 
 	<?php if(POST__GROUP_METADATA) { ?>
 		<div class="post__meta">
@@ -207,6 +211,8 @@ if (is_singular()) $hTag = "h1";
 		</div><!-- post__meta -->
 	<?php } ?>
 	<?php
+	if(POST__FEATUREDIMAGE_ShowOnSingle) {
+		
 	 if ( has_post_thumbnail()) {
 	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), POST__FEATUREDIMAGE_SIZE);
 	    
@@ -221,6 +227,7 @@ if (is_singular()) $hTag = "h1";
 <?php endif; ?>
 	    </div>
 	    <?php
+		   }
 	 }
 	 ?>
 	 
