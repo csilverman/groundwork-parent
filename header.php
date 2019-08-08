@@ -134,11 +134,11 @@ echo socialcard($og_obj);
 							<?php } ?>
 							
 
-							<b class="u-Masthead__siteTitle__text"><?php bloginfo( 'name' ); ?></b></a>
+							<b class="u-Masthead__siteTitle__text"><?php echo html_entity_decode(get_bloginfo( 'name' )); ?></b></a>
 						</<?php h1_or_not(); ?>>
 						
 						<?php if(SITE__SHOW_SITEDESC) { ?>
-						<h2 class="u-Masthead__siteDesc"><?php bloginfo( 'description' ); ?></h2>
+						<h2 class="u-Masthead__siteDesc"><?php echo get_bloginfo( 'description' ); ?></h2>
 						<?php } ?>
 					</div>
 				</header>

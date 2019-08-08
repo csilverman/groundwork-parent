@@ -17,17 +17,17 @@ function groundwork_paging_nav() {
 		return;
 	}
 	?>
-	<nav class="navigation pagingNav" role="navigation">
+	<nav class="navigation nav--prevNext pagingNav" role="navigation">
 		<h1 class="hide--visually ac-hiddenVisually ac-navTitle"><?php _e( 'Posts navigation', 'groundwork' ); ?></h1>
-		<div class="pagingNav__container">
-
+		<div class="nav__container pagingNav__container">
+			
 			<?php if ( get_next_posts_link() ) : ?>
 			
-			<div class="pagingNav__navItem navItem--previous pagingNav__previous"><?php next_posts_link( __( POST__NAVOLDER_CONTENT, 'groundwork' ) ); ?></div>
+			<div class="navItem pagingNav__navItem navItem--previous pagingNav__previous"><?php next_posts_link( __( POST__NAVOLDER_CONTENT, 'groundwork' ) ); ?></div>
 			<?php endif; ?>
 
 			<?php if ( get_previous_posts_link() ) : ?>
-			<div class="pagingNav__navItem navItem--next pagingNav__next"><?php previous_posts_link( __( POST__NAVNEWER_CONTENT, 'groundwork' ) ); ?></div>
+			<div class="navItem pagingNav__navItem navItem--next pagingNav__next"><?php previous_posts_link( __( POST__NAVNEWER_CONTENT, 'groundwork' ) ); ?></div>
 			<?php endif; ?>
 
 		</div><!-- .nav-links -->
@@ -48,10 +48,13 @@ function groundwork_post_nav() {
 	if ( ! $next && ! $previous ) {
 		return;
 	}
+	if(!$previous) $where_we_are = "at-start";
+	if(!$next) $where_we_are = "at-end";
+
 	?>
-	<div class="navigation postNav" role="navigation">
+	<div class="navigation nav--prevNext postNav" role="navigation">
 		<h1 class="ac-hiddenVisually ac-navTitle"><?php _e( 'Post navigation', 'groundwork' ); ?></h1>
-		<div class="postNav__container">
+		<div class="nav__container postNav__container <?php echo $where_we_are; ?>">
 			<?php
 			
 				if(POST__NAV_SHOWTITLE) { 
@@ -64,14 +67,18 @@ function groundwork_post_nav() {
 					$nextpost_text = POST__NAV_NEXTTITLE;
 				}
 			?>			
-	
-			<div class="postNav__navItem navItem--previous postNav__previous">
-				<?php echo get_previous_post_link('%link', '<b class="prevnext__title">Previous</b><b class="prevnext__name">%title</b>'); ?>
-			</div>
-			<div class="postNav__navItem navItem--next postNav__next">			
-				<?php echo get_next_post_link('%link', '<b class="prevnext__title">Next</b><b class="prevnext__name">%title</b>'); ?>
-			</div>
-		
+
+			<?php if($previous) { ?>
+				<div class="navItem postNav__navItem navItem--previous postNav__previous">
+					<?php echo get_previous_post_link('%link', '<b class="prevnext__title">Previous</b><b class="prevnext__name">%title</b>'); ?>
+				</div>
+			<?php } ?>
+			<?php if($next) { ?>
+				<div class="navItem postNav__navItem navItem--next postNav__next">			
+					<?php echo get_next_post_link('%link', '<b class="prevnext__title">Next</b><b class="prevnext__name">%title</b>'); ?>
+				</div>
+			<?php } ?>
+
 
 <?php 
 /*				previous_post_link( '<div class="postNav__navItem navItem--previous postNav__previous">%link</div>', _x( $prevpost_text, 'Previous post link', 'groundwork' ) );

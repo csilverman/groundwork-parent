@@ -162,7 +162,6 @@ add_action('init', 'replace_jquery');
 function groundwork_scripts() {
 	wp_enqueue_style( 'groundwork-style', get_stylesheet_uri() );
 
-
     wp_enqueue_script( 'waypoints', get_template_directory_uri() . '/js/libraries/jquery.waypoints.min.js',  array( 'jquery' ) ); 
     wp_enqueue_script( 'custom-name', get_stylesheet_directory_uri() . '/assets/js/site.js',  array( 'jquery' ) ); 
 
@@ -382,6 +381,31 @@ function exclude_category( $query ) {
 }
 add_action( 'pre_get_posts', 'exclude_category' );
 
+
+function the_categories($categories) {
+	/*	This accepts the standard output from the WordPress function get_the_category_list() and modifies it as needed. While I could probably write my own function to get the category list entirely, rather than using the WP function as input, the standard WP function also includes the /category/ base. That's configurable through WordPress - something I'm not sure how to account for in my own get-category function - and I'd rather not replicate WP functionality where I don't have to.
+	*/
+
+/*	$categories = str_ireplace('<ul class="post-categories">', '', $categories);
+	$categories = str_ireplace('</ul>', '', $categories);	
+	$categories = str_ireplace('</li>', ',', $categories);
+	$categories = str_ireplace('<li>', '', $categories);
+	return $categories;
+	*/
+
+
+	$doc = DOMDocument::loadHTML($categories);
+	$xpath = new DOMXPath($doc);
+	$query = "//a[@rel='category tag']";
+	$entries = $xpath->query($query);
+
+	foreach ($entries as $entry) {
+		echo $entry->getAttribute("href");
+	}
+	
+	// return $categories;
+	
+}
 
 
 

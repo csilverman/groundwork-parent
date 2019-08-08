@@ -14,7 +14,7 @@ $morePostClasses .= formatPostClasses(get_post_meta($post->ID, 'post__classes', 
 
 ?>
 
-<div id="post-<?php the_ID(); ?>" <?php post_class("post post--".$post->post_name." ".$morePostClasses); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class("post post--".$post->post_name." ".$morePostClasses); ?>>
 
 <?php 
 	$post__subdesc = get_post_meta($post->ID, 'subdesc', true); 
@@ -111,7 +111,6 @@ $hTag = "h2";
 if (is_singular()) $hTag = "h1";
 
 ?>
-	<article>
 		<header class="post__header">
 		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>">
 			<?php if(!is_single()) { ?>
@@ -174,7 +173,24 @@ if (is_singular()) $hTag = "h1";
 		<?php if(POST__SHOWCATEGORIES) { ?>
 			<b class="post__metaItem post__catContainer">
 				<h2 class="label label--cats"><?php echo CATEGORY__HEADERTEXT; ?></h2>
-					<?php echo get_the_category_list(); ?>
+					<?php 
+
+//https://codex.wordpress.org/Function_Reference/get_category
+	$all_categories = get_the_category();
+
+	echo '<ul class="post__categories">';
+	foreach($all_categories as $categories_item) {
+		if (POST__SHOW_CAT_DESC && $categories_item->description) {
+			$cat_desc = '<b class="category__description">'.$categories_item->description.'</b>';
+			$cat__name	= '<b class="category__name"><a href="'.get_category_link($categories_item->term_id).'">'.$categories_item->cat_name.'</a></b>';
+		}
+		else $cat__name = '<a href="'.get_category_link($categories_item->term_id).'">'.$categories_item->cat_name.'</a>';
+
+		echo '<li>'.$cat__name.$cat_desc.'</li>';
+	}
+	echo '</ul>';
+
+					?>
 			</b>
 		<?php } ?>
 
@@ -211,9 +227,9 @@ if (is_singular()) $hTag = "h1";
 		</div><!-- post__meta -->
 	<?php } ?>
 	<?php
-	if(POST__FEATUREDIMAGE_ShowOnSingle) {
+	if(!is_single() || POST__FEATUREDIMAGE_ShowOnSingle) {
 		
-	 if ( has_post_thumbnail()) {
+	 if (has_post_thumbnail()) {
 	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), POST__FEATUREDIMAGE_SIZE);
 	    
 	    ?>
@@ -271,5 +287,4 @@ if (is_singular()) $hTag = "h1";
 	<?php } ?>
 
 	<?php endif; ?>
-	</article>
-</div><!-- #post-## -->
+</article><!-- #post-## -->
