@@ -76,8 +76,6 @@ get_header(); ?>
 
 			<?php endwhile; ?>
 
-			<?php groundwork_paging_nav(); ?>
-
 		<?php else : ?>
 
 			<?php get_template_part( 'content', 'none' ); ?>
@@ -85,6 +83,8 @@ get_header(); ?>
 		<?php endif; ?>
 
 	</div><!-- /u-lContent -->
+
+	<?php groundwork_paging_nav(); ?>
 
 
 	<?php if(HOMEPAGE__HAS_OWNSIDEBAR) $addtlClasses = "widget-area--hpsidebar"; ?>

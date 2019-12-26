@@ -15,8 +15,8 @@ include('inc/html-classes.php');
 //	Determine whether site title should be an h1 or not
 
 function h1_or_not() {
-	if(is_singular()) echo "p";
-	else echo "h1";
+	if(is_home()) echo "h1";
+	else echo "p";
 }
 
 
@@ -34,7 +34,7 @@ function h1_or_not() {
 
 ?>
 
-<html <?php language_attributes(); ?> <?php body_class("no-js ".$html__classes); ?> <body>
+<html <?php language_attributes(); ?> <?php body_class("no-js ".$html__classes); ?>>
 	<head>
 
 		<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -63,20 +63,33 @@ if ( has_post_thumbnail( $page_id ) ) :
     $image_array = wp_get_attachment_image_src( get_post_thumbnail_id( $page_id ), 'optional-size' );
     $image = $image_array[0];
 else :
-    $image = get_template_directory_uri() . '/images/default-background.jpg';
+    $image = get_stylesheet_directory_uri() . '/assets/images/feature-image.png';
 endif;
 		
-$og_obj = array(
-	"image" => $image,
-	"title" => get_the_title($page_id),
-	"twitter:username" => "_csilverman",
-	"og:url" => get_permalink($page_id),
-	"description" => get_the_excerpt($page_id)
-);
+	if(is_single()) {
+		$og_obj = array(
+			"image" => $image,
+			"title" => get_the_title($page_id),
+			"twitter:username" => "_csilverman",
+			"og:url" => get_permalink($page_id),
+			"description" => get_the_excerpt($page_id)
+		);
 
+		echo socialcard($og_obj);
+	}
+	else {
+		$og_obj = array(
+			"image" => $image,
+			"title" => gw__get_site_title(),
+			"twitter:username" => "_csilverman",
+			"og:url" => esc_url( home_url( '/' ) ),
+			"description" => get_bloginfo( 'description' )
+		);
 
-echo socialcard($og_obj);
-?>			
+		echo socialcard($og_obj);
+	}
+
+?>
 
 			<link href="<?php echo get_template_directory_uri(); ?>/assets/css/site.css" rel="stylesheet" />
 
@@ -122,21 +135,8 @@ echo socialcard($og_obj);
 			<div class="u-lHeader" role="banner">
 				<header>
 					<div class="u-Masthead">
-						<<?php h1_or_not(); ?> class="u-Masthead__siteTitle">
-							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+						<?php include('inc/site-title.php'); ?>
 
-							<?php if(HEADER__USE_LOGO) { ?>
-								<img src="<?php echo HEADER__USE_LOGO; ?>" />
-							<?php } ?>
-
-							<?php if(HEADER__USE_INCLUDE) { ?>
-								<?php include("/app/public/wp-content/themes/csi-notes/svg-logo.php"); ?>
-							<?php } ?>
-							
-
-							<b class="u-Masthead__siteTitle__text"><?php echo html_entity_decode(get_bloginfo( 'name' )); ?></b></a>
-						</<?php h1_or_not(); ?>>
-						
 						<?php if(SITE__SHOW_SITEDESC) { ?>
 						<h2 class="u-Masthead__siteDesc"><?php echo get_bloginfo( 'description' ); ?></h2>
 						<?php } ?>

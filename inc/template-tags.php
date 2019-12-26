@@ -23,11 +23,11 @@ function groundwork_paging_nav() {
 			
 			<?php if ( get_next_posts_link() ) : ?>
 			
-			<div class="navItem pagingNav__navItem navItem--previous pagingNav__previous"><?php next_posts_link( __( POST__NAVOLDER_CONTENT, 'groundwork' ) ); ?></div>
+			<div class="prevNext__navItem pagingNav__navItem navItem--previous pagingNav__previous"><?php next_posts_link( __( POST__NAVOLDER_CONTENT, 'groundwork' ) ); ?></div>
 			<?php endif; ?>
 
 			<?php if ( get_previous_posts_link() ) : ?>
-			<div class="navItem pagingNav__navItem navItem--next pagingNav__next"><?php previous_posts_link( __( POST__NAVNEWER_CONTENT, 'groundwork' ) ); ?></div>
+			<div class="prevNext__navItem pagingNav__navItem navItem--next pagingNav__next"><?php previous_posts_link( __( POST__NAVNEWER_CONTENT, 'groundwork' ) ); ?></div>
 			<?php endif; ?>
 
 		</div><!-- .nav-links -->
@@ -69,12 +69,12 @@ function groundwork_post_nav() {
 			?>			
 
 			<?php if($previous) { ?>
-				<div class="navItem postNav__navItem navItem--previous postNav__previous">
+				<div class="pagingNav__navItem prevNext__navItem postNav__navItem navItem--previous postNav__previous">
 					<?php echo get_previous_post_link('%link', '<b class="prevnext__title">Previous</b><b class="prevnext__name">%title</b>'); ?>
 				</div>
 			<?php } ?>
 			<?php if($next) { ?>
-				<div class="navItem postNav__navItem navItem--next postNav__next">			
+				<div class="pagingNav__navItem prevNext__navItem postNav__navItem navItem--next postNav__next">			
 					<?php echo get_next_post_link('%link', '<b class="prevnext__title">Next</b><b class="prevnext__name">%title</b>'); ?>
 				</div>
 			<?php } ?>

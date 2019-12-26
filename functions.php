@@ -1,5 +1,13 @@
 <?php
 
+function cfg($constant) {
+	/*	cfg() checks if a setup constant exists before trying to use it. I need to use this on every setup var I have, because if I don't, there's going to be a lot of warnings, and people would need to have every setup var in their file whether they're using it or not. That's cluttery.	
+	*/
+	if (defined($constant)) 
+		return constant($constant);
+	else return false;
+}
+
 $child_path = get_stylesheet_directory();
 include($child_path."/_SETUP.php");
 
@@ -15,6 +23,15 @@ include($child_path."/_SETUP.php");
  * @link http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails
  */
 add_theme_support( 'post-thumbnails' );
+
+
+/*  Script for no-js / js class
+/* ------------------------------------ */
+function alx_html_js_class () {
+    echo '<script>document.documentElement.className = document.documentElement.className.replace("no-js","js");</script>'. "\n";
+}
+add_action( 'wp_head', 'alx_html_js_class', 1 );
+
 
  
 if ( ! function_exists( 'groundwork_setup' ) ) :
@@ -150,7 +167,7 @@ function replace_jquery() {
 	if (!is_admin()) {
 		// comment out the next two lines to load the local copy of jQuery
 		wp_deregister_script('jquery');
-		wp_register_script('jquery', get_template_directory_uri() . '/js/libraries/jquery.min.js', false, '1.11.3');
+		wp_register_script('jquery', get_template_directory_uri() . '/js/libraries/jquery.min.js', false, '3.1.1');
 		wp_enqueue_script('jquery');
 	}
 }
@@ -162,8 +179,21 @@ add_action('init', 'replace_jquery');
 function groundwork_scripts() {
 	wp_enqueue_style( 'groundwork-style', get_stylesheet_uri() );
 
-    wp_enqueue_script( 'waypoints', get_template_directory_uri() . '/js/libraries/jquery.waypoints.min.js',  array( 'jquery' ) ); 
-    wp_enqueue_script( 'custom-name', get_stylesheet_directory_uri() . '/assets/js/site.js',  array( 'jquery' ) ); 
+    wp_enqueue_script( 'waypoints', get_template_directory_uri() . '/js/libraries/jquery.waypoints.min.js',  array('jquery') ); 
+    wp_register_script( 'highlight-js', get_template_directory_uri() . '/js/libraries/highlight/highlight.pack.js');
+	wp_register_style( 'highlight-js-style', get_template_directory_uri().'/js/libraries/highlight/styles/agate.css');
+
+	//	https://github.com/goblindegook/littlefoot
+    wp_register_script( 'littlefoot-js', get_template_directory_uri() . '/js/libraries/littlefoot/littlefoot.min.js',  array('jquery') ); 
+	wp_register_style( 'littlefoot-js-style', get_template_directory_uri().'/js/libraries/littlefoot/littlefoot.css');
+
+    wp_register_script( 'imagesloaded', get_template_directory_uri() . '/js/libraries/imagesloaded.pkgd.min.js');
+
+	/*	Get rid of the built-in Gutenberg styling. Needed to do this when the image-and-text module proved to not be responsive, and I realized that building it from scratch was simply easier. */
+	wp_dequeue_style('wp-block-library');
+	wp_dequeue_style('wp-block-library-theme');
+
+    wp_register_script( 'site', get_stylesheet_directory_uri() . '/assets/js/site.js',  array('jquery'), time() ); 
 
 }
 
@@ -220,6 +250,14 @@ function postClass() {
     $slug = $post_data['post_name'];
     return "post--".$slug;
 }
+
+function gw__get_site_title() {
+	if (cfg('SITE__CUSTOM_TITLE')) {
+		return SITE__CUSTOM_TITLE; 
+	}
+	else return get_bloginfo( 'name' ); 
+}
+
 function categoryClass() {
 	$categories = get_the_category($post->ID);
 	$cat_prefix = "cat--";
@@ -242,7 +280,27 @@ function remove_more_jump_link($link) {
 }
 add_filter('the_content_more_link', 'remove_more_jump_link');
 
+function show_featured_image_for_this_post($post__classes) {
+	/*	This function determines whether or not to override POST__FEATUREDIMAGE_ShowInList. If POST__FEATUREDIMAGE_ShowInList is set to true, this never runs because everything's going to be shown anyway. If it's false, though, there may be exceptions: posts where the featured image is intended to appear despite the fact that featured images for post listings are turned off.
+		
+		These exceptions are defined in POST__FEATUREDIMAGE_ShowForThese. That's an array of items that, if used in post__classes, indicate that the featured image should be displayed for that post.
 
+		 This function accepts whatever is set in the current post's post__classes field.
+	*/
+	
+	$exceptions = cfg('POST__FEATUREDIMAGE_ShowForThese');
+
+	if($exceptions) {
+		//	First, turn the post__classes into an array, because they're not
+		$post__classes = explode(' ', $post__classes);
+				
+		//	Then see if there's any overlap between the two arrays
+		if (array_intersect($exceptions, $post__classes)) {
+			return true;
+		}
+	}
+	else return false;
+}
 
 function socialcard($arr) {
 	foreach ($arr as $key => $value) {
@@ -250,10 +308,23 @@ function socialcard($arr) {
 		
 		//	Some values appear in both Facebook and Twitter tags
 		//	Let's deal with those first
-		if (strpos($key, 'image') !== false) 
+		if (strpos($key, 'image') !== false) {
+			/* "The provided 'og:image' properties are not yet available because new images are processed asynchronously. To ensure shares of new URLs include an image, specify the dimensions using 'og:image:width' and 'og:image:height' tags." */
+				
+			$local_image_url = wp_make_link_relative($value);
+			$local_image_url = $_SERVER['DOCUMENT_ROOT'].$local_image_url;
+			list($image_width, $image_height, $image_type, $image_attr) = getimagesize($local_image_url);
+			$markup .= '<meta name="og:image:width" content="'.$image_width.'">';
+			$markup .= '<meta name="og:image:height" content="'.$image_height.'">';
+
+			
+			$markup .= '<meta name="twitter:card" content="summary_large_image">';
 			$markup .= '<meta name="twitter:image" content="'.$value.'">'.PHP_EOL.'<meta property="og:image" content="'.$value.'">';
-		if (strpos($key, 'title') !== false) 
+		}
+		if (strpos($key, 'title') !== false) {
+			$value = strip_tags($value);
 			$markup .= '<meta name="twitter:title" content="'.$value.'">'.PHP_EOL.'<meta property="og:title" content="'.$value.'">';
+		}
 		if (strpos($key, 'description') !== false) 
 			$markup .= '<meta name="twitter:description" content="'.$value.'">'.PHP_EOL.'<meta property="og:description" content="'.$value.'">';
 
@@ -408,6 +479,32 @@ function the_categories($categories) {
 }
 
 
+
+// https://css-tricks.com/snippets/wordpress/remove-privateprotected-from-post-titles/
+
+function the_title_trim($title) {
+
+//	$title = attribute_escape($title);
+
+	$findthese = array(
+		'#Protected:#',
+		'#Private:#'
+	);
+
+	$replacewith = array(
+
+/*		'', // What to replace "Protected:" with
+		'' // What to replace "Private:" with */
+
+
+		'<b class=label--admin>Protected</b>', // What to replace "Protected:" with
+		'<b class=label--admin>Private</b>' // What to replace "Private:" with
+	);
+
+	$title = preg_replace($findthese, $replacewith, $title);
+	return $title;
+}
+add_filter('the_title', 'the_title_trim');
 
 
 

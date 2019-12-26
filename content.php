@@ -9,8 +9,9 @@
 
 <?php
 
+$post__classes = get_post_meta($post->ID, 'post__classes', true);
 $morePostClasses = "";
-$morePostClasses .= formatPostClasses(get_post_meta($post->ID, 'post__classes', true));
+$morePostClasses .= formatPostClasses($post__classes);
 
 ?>
 
@@ -89,7 +90,7 @@ $hTag = "h2";
 ?>
 
 <?php
-	if(is_home()) {
+	if(!is_single()) {
 		$hp_post__styling = get_post_meta($post->ID, 'hp-post-styling', true);
 		$hp_more_css = get_post_meta($post->ID, 'hp-more-css', true);
 
@@ -107,17 +108,14 @@ $hTag = "h2";
 
 
 ?>
-<?php
-if (is_singular()) $hTag = "h1";
-
-?>
+	<?php if (is_singular()) $hTag = "h1"; ?>
 		<header class="post__header">
 		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>">
 			<?php if(!is_single()) { ?>
 				<a class="post__titleLink" href="<?php the_permalink(); ?>" rel="bookmark">
 			<?php } ?>
 		
-		<?php if($makePostTitleTheCategoryTitle) {
+			<?php if($makePostTitleTheCategoryTitle) {
 				echo $categoryTitle;
 			} else if(($postHasSubtitle) && (POST__ENABLE_SUBTITLES)) { 
 				echo $post__mainTitle.'<b class="post__subTitle">'.$post__subTitle.'</b>';
@@ -227,7 +225,7 @@ if (is_singular()) $hTag = "h1";
 		</div><!-- post__meta -->
 	<?php } ?>
 	<?php
-	if(!is_single() || POST__FEATUREDIMAGE_ShowOnSingle) {
+	if((!is_single() && (cfg('POST__FEATUREDIMAGE_ShowInList') || show_featured_image_for_this_post($post__classes) )) || POST__FEATUREDIMAGE_ShowOnSingle) {
 		
 	 if (has_post_thumbnail()) {
 	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), POST__FEATUREDIMAGE_SIZE);
