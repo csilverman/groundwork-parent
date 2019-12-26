@@ -7,7 +7,7 @@
 		<img src="<?php echo HEADER__USE_LOGO; ?>" />
 	<?php } ?>
 
-	<?php if(HEADER__USE_INCLUDE) { ?>
+	<?php if(cfg(HEADER__USE_INCLUDE)) { ?>
 		<?php include("/app/public/wp-content/themes/csi-notes/svg-logo.php"); ?>
 	<?php } ?>
 	

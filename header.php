@@ -119,12 +119,6 @@ endif;
 	</head>
 	
 	<body>
-			<?php if(SITE__UNIBAR) { ?>
-				<div class="universal-header">
-					<?php include(SITE__UNIBAR); ?>
-				</div>
-			<?php } ?>
-		</div>
 		<div class="u-lPageContent hfeed site">
 
 		<?php if(SITE__HAS_NAVIGATION) { ?>

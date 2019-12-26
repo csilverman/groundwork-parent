@@ -9,7 +9,9 @@ function cfg($constant) {
 }
 
 $child_path = get_stylesheet_directory();
-include($child_path."/_SETUP.php");
+$setup_file = $child_path."/_SETUP.php";
+if (file_exists($setup_file))
+	include($setup_file);
 
 /**
  * groundwork functions and definitions
