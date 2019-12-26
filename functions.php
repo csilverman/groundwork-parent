@@ -315,7 +315,9 @@ function socialcard($arr) {
 				
 			$local_image_url = wp_make_link_relative($value);
 			$local_image_url = $_SERVER['DOCUMENT_ROOT'].$local_image_url;
-			list($image_width, $image_height, $image_type, $image_attr) = getimagesize($local_image_url);
+			if(file_exists($local_image_url))
+
+				list($image_width, $image_height, $image_type, $image_attr) = getimagesize($local_image_url);
 			$markup .= '<meta name="og:image:width" content="'.$image_width.'">';
 			$markup .= '<meta name="og:image:height" content="'.$image_height.'">';
 
