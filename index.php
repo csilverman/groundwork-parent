@@ -49,10 +49,11 @@ get_header(); ?>
 				*/
 				?>
 				<?php 
+
 					if(!get_post_format()) {
 						get_template_part('content', get_post_format());
 					} else {
-						get_template_part('format', get_post_format());
+						get_template_part('template-parts/format', get_post_format());
 					}
 					
 					$post_count++;

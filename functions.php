@@ -182,6 +182,8 @@ function groundwork_scripts() {
 	wp_enqueue_style( 'groundwork-style', get_stylesheet_uri() );
 
     wp_enqueue_script( 'waypoints', get_template_directory_uri() . '/js/libraries/jquery.waypoints.min.js',  array('jquery') ); 
+    wp_enqueue_script( 'scrollhooks', get_template_directory_uri() . '/js/libraries/scrollhooks.js',  array('jquery') );
+
     wp_register_script( 'highlight-js', get_template_directory_uri() . '/js/libraries/highlight/highlight.pack.js');
 	wp_register_style( 'highlight-js-style', get_template_directory_uri().'/js/libraries/highlight/styles/agate.css');
 
