@@ -1,5 +1,16 @@
 <?php
 
+/*
+
+
+	Index
+	-----
+	
+	**3** Shortcodes
+
+
+*/
+
 function cfg($constant) {
 	/*	cfg() checks if a setup constant exists before trying to use it. I need to use this on every setup var I have, because if I don't, there's going to be a lot of warnings, and people would need to have every setup var in their file whether they're using it or not. That's cluttery.	
 	*/
@@ -393,47 +404,6 @@ function translate_archive_month($list) {
 	return $list; 
 }
 
-
-/*	http://joostkiens.com/improving-wp-caption-shortcode/ 
-	I modified this to remove the inline width from the caption, and to
-	add the "class" attribute to the shortcode container.
-*/
-
-/**
- * Improves the caption shortcode with HTML5 figure & figcaption; microdata & wai-aria attributes
- * 
- * @param  string $val     Empty
- * @param  array  $attr    Shortcode attributes
- * @param  string $content Shortcode content
- * @return string          Shortcode output
- */
-function jk_img_caption_shortcode_filter($val, $attr, $content = null)
-{
-	extract(shortcode_atts(array(
-		'id'      => '',
-		'align'   => 'aligncenter',
-		'width'   => '',
-		'caption' => '',
-		'class' => ''
-	), $attr));
-	
-	// No caption, no dice... But why width? 
-	if ( 1 > (int) $width || empty($caption) )
-		return $val;
- 
-	if ( $id )
-		$id = esc_attr( $id );
-     
-	// Add itemprop="contentURL" to image - Ugly hack
-
-	$content = str_replace('<img', '<img class="figure__image"', $content);
-
-	$content = str_replace('<a', '<a class="figure__imageLink"', $content);
-
-	return '<div id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="figure ' . esc_attr($class) . " " . esc_attr($align) . '"><figure>' . do_shortcode( $content ) . '<div id="figcaption_'. $id . '" class="figure__imageCaption"><figcaption>' . $caption . '</figcaption></div></div>';
-}
-add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
-
 function show_post($path) {
 	$post = get_page_by_path($path);
 	$content = apply_filters('the_content', $post->post_content);
@@ -511,6 +481,104 @@ function the_title_trim($title) {
 	return $title;
 }
 add_filter('the_title', 'the_title_trim');
+
+
+
+
+/*	**3** SHORTCODES
+	================ */
+
+
+
+/*	http://joostkiens.com/improving-wp-caption-shortcode/ 
+	I modified this to remove the inline width from the caption, and to
+	add the "class" attribute to the shortcode container.
+*/
+
+/**
+ * Improves the caption shortcode with HTML5 figure & figcaption; microdata & wai-aria attributes
+ * 
+ * @param  string $val     Empty
+ * @param  array  $attr    Shortcode attributes
+ * @param  string $content Shortcode content
+ * @return string          Shortcode output
+ */
+function jk_img_caption_shortcode_filter($val, $attr, $content = null)
+{
+	extract(shortcode_atts(array(
+		'id'      => '',
+		'align'   => 'aligncenter',
+		'width'   => '',
+		'caption' => '',
+		'class' => ''
+	), $attr));
+	
+	// No caption, no dice... But why width? 
+	if ( 1 > (int) $width || empty($caption) )
+		return $val;
+ 
+	if ( $id )
+		$id = esc_attr( $id );
+     
+	// Add itemprop="contentURL" to image - Ugly hack
+
+	$content = str_replace('<img', '<img class="figure__image"', $content);
+
+	$content = str_replace('<a', '<a class="figure__imageLink"', $content);
+
+	return '<div id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="figure ' . esc_attr($class) . " " . esc_attr($align) . '"><figure>' . do_shortcode( $content ) . '<div id="figcaption_'. $id . '" class="figure__imageCaption"><figcaption>' . $caption . '</figcaption></div></div>';
+}
+add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
+
+
+/**
+ * Generates the MailChimp signup form
+ * 
+ * @param  string $val     Empty
+ * @param  array  $attr    Shortcode attributes
+ * @param  string $content Shortcode content
+ * @return string          Shortcode output
+ */
+
+function cs_emailsignup_shortcode() { 
+
+$signup_markup = <<<SIGNUP
+
+<!-- Begin MailChimp Signup Form -->
+<script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
+
+<div class="email-signup" id="mc_embed_signup">
+	<p><strong>Subscribe</strong></p>
+	<p>I'll email you something interesting every few weeks. Might be major, might be minor—who knows? (You will.)</p>
+	<div id="mce-responses" class="clear">
+		<div class="response" id="mce-error-response" style="display:none"></div>
+		<div class="response" id="mce-success-response" style="display:none"></div>
+	</div>	
+<form action="https://csilverman.us13.list-manage.com/subscribe/post?u=1da754a31b5145eba5b18015b&amp;id=44632386e4" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate="novalidate">
+    <div class="email-signup__form-content" id="mc_embed_signup_scroll">
+<div class="mc-field-group">
+	<input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="email" aria-required="true">
+</div>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_1da754a31b5145eba5b18015b_44632386e4" tabindex="-1" value=""></div>
+	<input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+    </div>
+</form>
+
+<details>
+<summary>Privacy</summary>
+<p>I'm using MailChimp—check out their <a href="https://mailchimp.com/legal/privacy/">privacy policy</a>. My own privacy policy is pretty simple: I don't do shady stuff with my subscriber list for any reason.</p>
+</details>
+
+</div>
+<!--End mc_embed_signup-->
+
+SIGNUP;
+
+	return $signup_markup;
+} 
+
+add_shortcode('email_signup', 'cs_emailsignup_shortcode'); 
 
 
 
