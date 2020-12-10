@@ -90,9 +90,6 @@ endif;
 	}
 
 ?>
-
-			<link href="<?php echo get_template_directory_uri(); ?>/assets/css/site.css" rel="stylesheet" />
-
 		<?php wp_head(); ?>
 		
 		<?php

@@ -4,20 +4,62 @@
 
 
 	Index
-	-----
+	=====
+	
+	- Utilities
 	
 	**3** Shortcodes
-
+	
+	- Gutenberg overrides
 
 */
 
+
+/*	UTILITIES
+	---------
+	These functions provide basic theme machinery, and are used by other functions.
+*/
+
+
+function cfg($setting, $get_value = false, $default = '') {
+	
+	//	First: Is the setting even defined - that is, present in the config file?
+	if (defined($setting)) {
+		
+		//	Okay, it's in settings, but is it true?
+		if(constant($setting)) {
+
+			//	And finally, do we need to know what its value actually is - say, if it's a string?			
+			if($get_value) {
+				return constant($setting);
+			}
+			else {
+				return true;
+			}
+		}
+		else return false;
+	}
+	//  If the setting isn't present, but a default value was provided,
+	//  return that default value.
+	else if ($default !== '') {
+		return $default;
+	}
+	//  No setting is defined, and no default value is specified
+	else {
+		return false;
+	}
+}
+
+/*
+
 function cfg($constant) {
 	/*	cfg() checks if a setup constant exists before trying to use it. I need to use this on every setup var I have, because if I don't, there's going to be a lot of warnings, and people would need to have every setup var in their file whether they're using it or not. That's cluttery.	
-	*/
+	*//*
 	if (defined($constant)) 
 		return constant($constant);
 	else return false;
 }
+*/
 
 $child_path = get_stylesheet_directory();
 $setup_file = $child_path."/_SETUP.php";
@@ -36,6 +78,45 @@ if (file_exists($setup_file))
  * @link http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails
  */
 add_theme_support( 'post-thumbnails' );
+
+
+
+
+/*	Gutenberg overrides
+	=================== */
+	
+/*	Replacing the four ludicrously large font sizes with a tasteful "intro" size */
+add_theme_support( 'editor-font-sizes', array(
+		array(
+			'name' => __( 'Normal', 'gutenberg-test' ),
+			'shortName' => __( 'N', 'gutenberg-test' ),
+			'size' => 16,
+			'slug' => 'normal'
+		),
+		array(
+			'name' => __( 'Intro', 'gutenberg-test' ),
+			'shortName' => __( 'N', 'gutenberg-test' ),
+			'size' => 20,
+			'slug' => 'intro'
+		),
+	) );
+add_theme_support('disable-custom-font-sizes');
+
+
+/*	Custom sizes
+	------------ */
+
+add_image_size( 'width-66', 220, 180 );
+add_image_size( 'width-80', 220, 180 );
+
+add_filter( 'image_size_names_choose', 'gw_custom_sizes' );
+ 
+function gw_custom_sizes( $sizes ) {
+    return array_merge( $sizes, array(
+        'width-66' => __( '66% wide' ),
+        'width-80' => __( '80% wide' )
+    ) );
+}
 
 
 /*  Script for no-js / js class
@@ -303,7 +384,7 @@ function show_featured_image_for_this_post($post__classes) {
 		 This function accepts whatever is set in the current post's post__classes field.
 	*/
 	
-	$exceptions = cfg('POST__FEATUREDIMAGE_ShowForThese');
+	$exceptions = cfg('POST__FEATUREDIMAGE_ShowForThese', true);
 
 	if($exceptions) {
 		//	First, turn the post__classes into an array, because they're not
@@ -356,7 +437,7 @@ function socialcard($arr) {
 }
 
 function specialDateFormatArray() {
-	if (CAT__USE_SPECIAL_DATE_FORMAT) {
+	if (cfg('CAT__USE_SPECIAL_DATE_FORMAT')) {
 	
 		/*	Goal: Take the string specified for CAT__USE_SPECIAL_DATE_FORMAT
 			and turn it into an array that can then be checked to see if the

@@ -36,8 +36,8 @@ $dateFormat = '';
 /*	The following arrays contain the IDs of categories
 	with specific requirements. */
 
-if (CAT__USE_NAME_OF_CAT_AS_HEADER) {
-	$catsWithEponymousPostTitles = explode(",", CAT__USE_NAME_OF_CAT_AS_HEADER);
+if (cfg('CAT__USE_NAME_OF_CAT_AS_HEADER')) {
+	$catsWithEponymousPostTitles = explode(",", cfg('CAT__USE_NAME_OF_CAT_AS_HEADER', true));
 	$catsWithSpecialDateFormat = specialDateFormatArray();
 
 	
@@ -73,7 +73,7 @@ if((strpos($post__title, ":") == true) && ($post__format == ""))
 
 // $postHasSubtitle = true;
 
-if(POST__ENABLE_SUBTITLES) {
+if(cfg('POST__ENABLE_SUBTITLES')) {
 	if($postHasSubtitle) {
 		$post__title = explode(":", $post__title);
 		$post__mainTitle = $post__title[0];
@@ -90,6 +90,9 @@ $hTag = "h2";
 ?>
 
 <?php
+	
+	/*	HOMEPAGE/ARCHIVE */
+	
 	if(!is_single()) {
 		$hp_post__styling = get_post_meta($post->ID, 'hp-post-styling', true);
 		$hp_more_css = get_post_meta($post->ID, 'hp-more-css', true);
@@ -105,10 +108,15 @@ $hTag = "h2";
 		echo $hp_more_css;
 		echo '</style>';
 	}
-
-
 ?>
-	<?php if (is_singular()) $hTag = "h1"; ?>
+
+	
+<?php 
+	if (is_singular()) { 
+		$hTag = "h1";
+	}
+?>
+
 		<header class="post__header">
 		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>">
 			<?php if(!is_single()) { ?>
@@ -117,7 +125,7 @@ $hTag = "h2";
 		
 			<?php if($makePostTitleTheCategoryTitle) {
 				echo $categoryTitle;
-			} else if(($postHasSubtitle) && (POST__ENABLE_SUBTITLES)) { 
+			} else if(($postHasSubtitle) && (cfg('POST__ENABLE_SUBTITLES'))) { 
 				echo $post__mainTitle.'<b class="post__subTitle">'.$post__subTitle.'</b>';
 			} else {
 				the_title();
@@ -133,26 +141,26 @@ $hTag = "h2";
 
 		</header>
 
-	<?php if(POST__GROUP_METADATA) { ?>
+	<?php if(cfg('POST__GROUP_METADATA')) { ?>
 		<div class="post__meta">
 	<?php } ?>
 
-		<?php if(SHOW_AUTHORS) { ?>
+		<?php if(cfg('SHOW_AUTHORS')) { ?>
 			<b class="post__metaItem post__authorContainer">
-				<?php if(AUTHOR__SHOWAVATAR) { ?>
+				<?php if(cfg('AUTHOR__SHOWAVATAR')) { ?>
 					<b class="author__avatar">
-						<?php echo get_avatar( get_the_author_meta( 'ID' ), AUTHOR__AVATARSIZE ); ?>
+						<?php echo get_avatar( get_the_author_meta( 'ID' ), cfg('AUTHOR__AVATARSIZE', true) ); ?>
 					</b>
 				<?php } ?>
 				<b class="author__name">
-					<b class="label label--author"><?php echo AUTHOR__BYLINETEXT; ?></b>
+					<b class="label label--author"><?php echo cfg('AUTHOR__BYLINETEXT', true); ?></b>
 					<b class="author__link"><?php echo the_author_posts_link(); ?></b>
 				</b>
 			</b>
 		<?php } ?>
 		<b class="post__metaItem post__dateContainer">
 		
-			<?php if(POST_DATELABEL === false) {
+			<?php if(cfg('POST_DATELABEL') === false) {
 				$label_postDate_hidden = "hide--visually";
 			} else { 
 			?><b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Posted on: </b><?php } ?>
@@ -160,17 +168,16 @@ $hTag = "h2";
 			<b class="post__date"><?php the_time('M d, Y'); ?></b>
 		</b>
 
-		<?php if(POST__SHOWDATEMODIFIED) { ?>
+		<?php if(cfg('POST__SHOWDATEMODIFIED')) { ?>
 			<b class="post__metaItem post__dateModifiedContainer">
 				<b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Modified on: </b>
 				<b class="post__date"><?php echo $post->post_modified; ?></b>
 			</b>
 		<?php } ?>
 
-
-		<?php if(POST__SHOWCATEGORIES) { ?>
+		<?php if(cfg('POST__SHOWCATEGORIES')) { ?>
 			<b class="post__metaItem post__catContainer">
-				<h2 class="label label--cats"><?php echo CATEGORY__HEADERTEXT; ?></h2>
+				<h2 class="label label--cats"><?php echo cfg('CATEGORY__HEADERTEXT', true); ?></h2>
 					<?php 
 
 //https://codex.wordpress.org/Function_Reference/get_category
@@ -178,7 +185,7 @@ $hTag = "h2";
 
 	echo '<ul class="post__categories">';
 	foreach($all_categories as $categories_item) {
-		if (POST__SHOW_CAT_DESC && $categories_item->description) {
+		if (cfg('POST__SHOW_CAT_DESC') && $categories_item->description) {
 			$cat_desc = '<b class="category__description">'.$categories_item->description.'</b>';
 			$cat__name	= '<b class="category__name"><a href="'.get_category_link($categories_item->term_id).'">'.$categories_item->cat_name.'</a></b>';
 		}
@@ -193,7 +200,7 @@ $hTag = "h2";
 		<?php } ?>
 
 
-		<?php if(POST__SHOWTAGS && !POST__TAGSBELOWPOST) {
+		<?php if(cfg('POST__SHOWTAGS') && !cfg('POST__TAGSBELOWPOST')) {
 			$tags_list = get_the_tag_list( '', __( '', 'groundwork' ) );
 			if ( $tags_list ) :
 		?>
@@ -210,10 +217,10 @@ $hTag = "h2";
 		<?php endif; } ?>
 
 
-		<?php if(SHOW_COMMENTS) { ?>
+		<?php if(cfg('SHOW_COMMENTS')) { ?>
 		<b class="post__metaItem post__commentLinkContainer">
 			<b class="post__comments">
-			<?php comments_popup_link( __( COMMENT_TEXT, 'groundwork' ), __( COMMENT_TEXT_1COMMENT, 'groundwork' ), __( '%'.COMMENT_TEXT_MULTI, 'groundwork' ) ); ?>
+			<?php comments_popup_link( __( cfg('COMMENT_TEXT', true), 'groundwork' ), __( cfg('COMMENT_TEXT_1COMMENT', true), 'groundwork' ), __( '%'.COMMENT_TEXT_MULTI, 'groundwork' ) ); ?>
 			</b>
 		</b>
 		<?php } ?>
@@ -225,10 +232,10 @@ $hTag = "h2";
 		</div><!-- post__meta -->
 	<?php } ?>
 	<?php
-	if((!is_single() && (cfg('POST__FEATUREDIMAGE_ShowInList') || show_featured_image_for_this_post($post__classes) )) || POST__FEATUREDIMAGE_ShowOnSingle) {
+	if((!is_single() && (cfg('POST__FEATUREDIMAGE_ShowInList') || show_featured_image_for_this_post($post__classes) )) || cfg('POST__FEATUREDIMAGE_ShowOnSingle')) {
 		
 	 if (has_post_thumbnail()) {
-	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), POST__FEATUREDIMAGE_SIZE);
+	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), cfg('POST__FEATUREDIMAGE_SIZE', true));
 	    
 	    ?>
 	    
@@ -246,7 +253,7 @@ $hTag = "h2";
 	 ?>
 	 
 	 <?php
-		  if((BLOG__EXCPT_ON_HOME) && is_home()) $only_show_excerpt_on_home = true;
+		  if((cfg('BLOG__EXCPT_ON_HOME')) && is_home()) $only_show_excerpt_on_home = true;
 	 ?>
 	<?php if ( (is_search() || is_archive())
 		 || $only_show_excerpt_on_home) : // Only display Excerpts for Search ?>
@@ -255,7 +262,7 @@ $hTag = "h2";
 	</div><!-- .entry-summary -->
 	<?php else : ?>
 	<div class="entry__content">
-		<?php the_content( __( POST__READMORE_TEXT, 'groundwork' ) ); ?>
+		<?php the_content( __( cfg('POST__READMORE_TEXT', true), 'groundwork' ) ); ?>
 		<?php
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . __( 'Pages:', 'groundwork' ),
@@ -264,14 +271,14 @@ $hTag = "h2";
 		?>
 	</div><!-- .entry-content -->
 
-	<?php if(POST__TAGSBELOWPOST) { ?>
+	<?php if(cfg('POST__TAGSBELOWPOST')) { ?>
 
-		<?php if(POST__SHOWTAGS) {
+		<?php if(cfg('POST__SHOWTAGS')) {
 			$tags_list = get_the_tag_list( '', __( '', 'groundwork' ) );
 			if ( $tags_list ) :
 		?>
 		<b class="post__metaItem post__tagsContainer">
-			<h2 class="label label--postTags"><?php echo TAG__HEADERTEXT; ?></h2>
+			<h2 class="label label--postTags"><?php echo cfg('TAG__HEADERTEXT', true); ?></h2>
 			<ul class="post__tags">
 				<?php
 				if(get_the_tag_list()) {

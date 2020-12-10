@@ -11,7 +11,7 @@
 	</div> <!-- /u-lMain -->
 
 
-	<?php if(SITE__HAS_NAVIGATION) { ?>
+	<?php if(cfg('SITE__HAS_NAVIGATION')) { ?>
 		<div class="nav u-NavSite" id="navigation">
 			<nav role="navigation">
 	
@@ -28,7 +28,7 @@
 
 
 	<div class="u-lFooter">
-		<?php if(SITE__HAS_FOOTERWIDGETS) { ?>
+		<?php if(cfg('SITE__HAS_FOOTERWIDGETS')) { ?>
 			<div class="widget-area" role="complementary">
 				<?php if ( ! dynamic_sidebar( 'sidebar-2' ) ) : ?>
 		
@@ -43,7 +43,7 @@
 
 <?php wp_footer(); ?>
 
-<?php if (TYPEKIT) { ?>
+<?php if (cfg('TYPEKIT')) { ?>
 <script type="text/javascript" src="//use.typekit.net/<?php echo TYPEKIT; ?>.js"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 

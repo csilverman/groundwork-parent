@@ -3,15 +3,17 @@
 	<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 	<?php // } ?>
 
-	<?php if(HEADER__USE_LOGO) { ?>
-		<img src="<?php echo HEADER__USE_LOGO; ?>" />
+	<?php if(cfg('HEADER__USE_LOGO')) { ?>
+		<img src="<?php echo cfg('HEADER__USE_LOGO', true); ?>" />
 	<?php } ?>
 
-	<?php if(cfg(HEADER__USE_INCLUDE)) { ?>
-		<?php include("/app/public/wp-content/themes/csi-notes/svg-logo.php"); ?>
+	<?php if(cfg('HEADER__USE_INCLUDE')) { ?>
+		<?php
+			$header_include_path = cfg('HEADER__USE_INCLUDE', true);
+			include($header_include_path);
+		?>
 	<?php } ?>
 	
-
 	<b class="u-Masthead__siteTitle__text">
 		<?php
 			/*

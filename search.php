@@ -10,12 +10,12 @@ get_header(); ?>
 	<div class="u-lContent">
 
 		<?php if ( have_posts() ) : ?>
+		
+			<?php
+				$title_text = cfg('SEARCH__PAGETITLE', true, 'Search Results for: %s');
+			?>
 
-			<div class="post__header">
-				<header>
-					<h1 class="post__title"><?php printf( __( 'Search Results for: %s', 'groundwork' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
-				</header><!-- .entry-header -->
-			</div>
+			<h1 class="u-pageTitle archives__title"><?php printf( __( $title_text, 'groundwork' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
 	
 			<?php /* Start the Loop */ ?>
 			<?php while ( have_posts() ) : the_post(); ?>
