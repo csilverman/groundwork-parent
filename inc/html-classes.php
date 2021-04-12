@@ -1,6 +1,37 @@
-<?php 
+<?php
+
+//	Here's where we set up the HTML classes.
+
+$html__classes = 'wp no-js ';
+
+//	First of all: to subnav or not to subnav?
+
+if(has_subpage()) $html__classes .= ' has-subnav';
+else $html__classes .= ' no-subnav';
+
+//	Now then; do we have a sidebar or not?
+
+$no_sidebar = get_post_meta($post->ID, 'vpress__no-sidebar', true);
+
+if($no_sidebar) $html__classes .= ' no-sidebar';
+else $html__classes .= ' has-sidebar';
+
+//	On Offices, the blog feature is being used for announcements. Since it's a list of
+//	announcements, we want a more compact layout for each post similar to the standard Vassar news page.
+
+if(!is_singular() && cfg('BLOG__USE_MINIPOST')) $html__classes .= ' minimal-post-on-frontpage';
+
+if(has_post_thumbnail()) $html__classes .= ' has-postThumbnail';
+
+//	Get the root parent for this page
+
+$this_post_parent = get_root_parent($post);
+$parent_slug = $this_post_parent->post_name;
+
+$html__classes .= ' rootParent-'.$parent_slug;
+
 	
-$html__classes = "wp";
+// $html__classes = "wp";
 
 //	First, add post categories to the class list
 //	But only if we're on a post page

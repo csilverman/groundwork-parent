@@ -119,7 +119,7 @@ $hTag = "h2";
 
 		<header class="post__header">
 		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>">
-			<?php if(!is_single()) { ?>
+			<?php if(!is_singular()) { ?>
 				<a class="post__titleLink" href="<?php the_permalink(); ?>" rel="bookmark">
 			<?php } ?>
 		
@@ -131,7 +131,7 @@ $hTag = "h2";
 				the_title();
 			}
 			?>
-			<?php if(!is_single()) { ?>
+			<?php if(!is_singular()) { ?>
 				</a>
 			<?php } ?>
 		</<?php echo $hTag; ?>>

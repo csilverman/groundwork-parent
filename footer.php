@@ -8,9 +8,9 @@
  */
 ?>
 
-	</div> <!-- /u-lMain -->
+<!--	</div> <!-- /u-lMain --> 
 
-
+<?php /*
 	<?php if(cfg('SITE__HAS_NAVIGATION')) { ?>
 		<div class="nav u-NavSite" id="navigation">
 			<nav role="navigation">
@@ -25,7 +25,7 @@
 			</nav>
 		</div> <!-- /u-NavSite -->
 	<?php } ?>
-
+*/ ?>
 
 	<div class="u-lFooter">
 		<?php if(cfg('SITE__HAS_FOOTERWIDGETS')) { ?>

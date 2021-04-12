@@ -1,3 +1,43 @@
+Apr 11, 2021 - version 0.3
+==========================
+
+* Renamed page.php and single.php to unused-. This is so pages and single posts will get the index.php template, not their own templates. That way, I can change the template markup in one place and have it take effect everywhere.
+
+* content.php
+** Noticed that titles on single pages were links, even though they had no reason to be since they only linked back to the page you're already on. I actually did have code that checked to see whether a link should be displayed, and that code used the is_single() conditional. That was returning false, since that only works on single posts, not pages. Now that pages don't have their own template - the standard blog template is being applied to pages - the page titles were being linked as though the content type was for a blog post in a list, not a final endpoint page. I changed is_single() to is_singular(), which returns true if it's called from any single page/post.
+
+* footer.php
+** Moved nav out of footer. Nav is now in inc/navigation.php
+** Moved the end tag for u-lMain into the main index.php template
+
+* functions.php
+** Added has_subpage() function. This is necessary for adding the 'has-subnav' class to the HTML tag.
+** Added get_root_parent() function. This is necessary for adding the class of a page's rootmost parent to the HTML tag.
+** Added some code from Christian Varga for the subnav area. Having subnav on each page that only contains the subnav for that section is not easy to do, but CV has some code that does the job. This is what I was using on the Vassar parent theme as well.
+
+* inc/html-classes.php
+** Added code from Vassar parent theme for applying various classes to the HTML tag. While this code was in the header.php file in the Vassar theme, GWP is already set up to include the html-classes file, so I didn't need to set that up as an include, I just needed to add the class code.
+
+* inc/navigation.php
+** Added this file. This contains both the top-level and subnav for the theme. Up to this point, I'd put nav in footer.php; I've removed it from there, so nav has its own file now.
+
+* index.php
+** Since index.php is the template applied to all situations now, it needs to include paging nav for when it's displaying a single page or post. Previously, it only included paging nav for posts, since pages had their own template; it now determines whether it's being used for a page or post, and displays paging nav for both.
+** Added include for inc/navigation.php
+
+* page.php
+** Deprecated - renamed to unused-page.php
+
+* single.php
+** Deprecated - renamed to unused-single.php
+
+* sidebar.php
+** Added hooks for gwp_inner_sidebar_before and gwp_inner_sidebar_after. These come before and after the sidebar widget area. I added these for the Jolt project, when I needed to wrap the sidebar in something.
+
+
+
+
+
 Nov 24, 2020 - version 0.2.1
 ============================
 

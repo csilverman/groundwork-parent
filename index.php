@@ -11,7 +11,9 @@
  * @package groundwork
  */
 
-get_header(); ?>
+get_header(); 
+
+?>
 
 	<?php if(HOMEPAGE__HAS_BLOGINTRO) { ?>
 		<div class="blogIntro">
@@ -81,11 +83,28 @@ get_header(); ?>
 
 			<?php get_template_part( 'content', 'none' ); ?>
 
+
 		<?php endif; ?>
 
 	</div><!-- /u-lContent -->
 
-	<?php groundwork_paging_nav(); ?>
+	<?php
+		/*	Previously, pages had their own template, and the paging nav
+			was included in that template. Now that I've dropped those
+			templates, the main index template is used for everything, so
+			I need to determine whether this is a page or a post.
+			
+			At some point, I think there should be a single paging_nav function
+			that works for all single elements.
+		*/
+		if (is_singular() && !is_single())
+			//	If this is a single page, but it's not a single blog post
+			groundwork_paging_nav();
+			//	or if this is a blog post
+		else if (is_single())
+			groundwork_post_nav("");
+	?>
+
 
 
 	<?php if(HOMEPAGE__HAS_OWNSIDEBAR) $addtlClasses = "widget-area--hpsidebar"; ?>
@@ -103,6 +122,10 @@ get_header(); ?>
 			}
 		?>
 	</div><!-- /u-lAside -->
+</div> <!-- /u-lMain -->
+
+<?php 
+	include(get_template_directory() . '/inc/navigation.php'); ?>
 
 <?php get_footer(); ?>
 
