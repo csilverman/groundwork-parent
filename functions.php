@@ -746,6 +746,34 @@ add_shortcode('email_signup', 'cs_emailsignup_shortcode');
 
 
 
+/*	
+	https://wpdevdesign.com/how-to-remove-archive-category-etc-pre-title-inserts-in-archive-titles/
+*/
+
+add_filter( 'get_the_archive_title', 'my_theme_archive_title' );
+/**
+ * Remove archive labels.
+ * 
+ * @param  string $title Current archive title to be displayed.
+ * @return string        Modified archive title to be displayed.
+ */
+function my_theme_archive_title( $title ) {
+    if ( is_category() ) {
+        $title = single_cat_title( cfg( 'ARCHIVE__CAT_PREFIX', true, '' ), false );
+    } elseif ( is_tag() ) {
+        $title = single_tag_title( cfg( 'ARCHIVE__TAG_PREFIX', true, '' ), false );
+    } elseif ( is_author() ) {
+        $title = '<span class="vcard">' . get_the_author() . '</span>';
+    } elseif ( is_post_type_archive() ) {
+        $title = post_type_archive_title( cfg( 'ARCHIVE__POSTTYPE_PREFIX', true, '' ), false );
+    } elseif ( is_tax() ) {
+        $title = single_term_title( '', false );
+    }
+
+    return '<h1 class="u-pageTitle archives__title">'.$title.'</h1>';
+}
+
+
 
 
 

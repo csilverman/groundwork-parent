@@ -59,11 +59,6 @@ if (cfg('CAT__USE_NAME_OF_CAT_AS_HEADER')) {
 		}
 	}
 }
-?>
-
-
-<?php
-
 
 $post__title = get_the_title($post->ID);
 $post__format = get_post_format($post->ID);
@@ -87,10 +82,7 @@ if(cfg('POST__ENABLE_SUBTITLES')) {
 	
 $hTag = "h2";
 
-?>
 
-<?php
-	
 	/*	HOMEPAGE/ARCHIVE */
 	
 	if(!is_single()) {
@@ -108,18 +100,46 @@ $hTag = "h2";
 		echo $hp_more_css;
 		echo '</style>';
 	}
-?>
 
-	
-<?php 
 	if (is_singular()) { 
 		$hTag = "h1";
 	}
 ?>
 
+	<?php if(cfg('POST__GROUP_TITLE_AND_META')) { ?>
+		<div class="post__headerblock">
+	<?php
+		do_action( 'gwp__headerblock_open');
+	} ?>
+
+
 		<header class="post__header">
 		<<?php echo $hTag; ?> class="post__title" title="<?php the_title(); ?>">
-			<?php if(!is_singular()) { ?>
+		
+		<?php
+		/*	There are two situations where an item's title would *not* be linked:
+		
+			-	It's a permalink page. If you're viewing a blog post, that post's title should
+				not be linked to the page you're already on.
+
+			-	It's a content type that you don't want to link to a single page, and you've
+				listed that content type in CTYPE__DONT_LINK_TITLE.
+			
+			Right now, we're going to check to see if the current post belongs to a content
+			type that shouldn't link.
+		*/
+		
+		
+			$this_post_type = get_post_type();
+			
+			//	This gets us a comma-delimited list of types that shouldn't link
+			$types_that_shouldnt_link = cfg('CTYPE__DONT_LINK_TITLE', true);
+			
+			//	Turn it into an array
+			$types_that_shouldnt_link = explode(',', $types_that_shouldnt_link);
+		?>
+		
+			<?php if(!is_singular() && !in_array($this_post_type, $types_that_shouldnt_link, true)) { ?>
 				<a class="post__titleLink" href="<?php the_permalink(); ?>" rel="bookmark">
 			<?php } ?>
 		
@@ -131,151 +151,68 @@ $hTag = "h2";
 				the_title();
 			}
 			?>
-			<?php if(!is_singular()) { ?>
+			<?php if(!is_singular() && !in_array($this_post_type, $types_that_shouldnt_link, true)) { ?>
 				</a>
 			<?php } ?>
 		</<?php echo $hTag; ?>>
 
 
-		<?php if ($post__subdesc) { ?><p class="post__subdesc"><?php echo $post__subdesc."</p>"; } ?>
+		<?php if ($post__subdesc) { ?>
+			<p class="post__subdesc">
+		<?php
+			echo $post__subdesc."</p>";
+			}
+		?>
 
 		</header>
 
-	<?php if(cfg('POST__GROUP_METADATA')) { ?>
-		<div class="post__meta">
-	<?php } ?>
-
-		<?php if(cfg('SHOW_AUTHORS')) { ?>
-			<b class="post__metaItem post__authorContainer">
-				<?php if(cfg('AUTHOR__SHOWAVATAR')) { ?>
-					<b class="author__avatar">
-						<?php echo get_avatar( get_the_author_meta( 'ID' ), cfg('AUTHOR__AVATARSIZE', true) ); ?>
-					</b>
-				<?php } ?>
-				<b class="author__name">
-					<b class="label label--author"><?php echo cfg('AUTHOR__BYLINETEXT', true); ?></b>
-					<b class="author__link"><?php echo the_author_posts_link(); ?></b>
-				</b>
-			</b>
-		<?php } ?>
-		<b class="post__metaItem post__dateContainer">
-		
-			<?php if(cfg('POST_DATELABEL') === false) {
-				$label_postDate_hidden = "hide--visually";
-			} else { 
-			?><b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Posted on: </b><?php } ?>
-			
-			<b class="post__date"><?php the_time('M d, Y'); ?></b>
-		</b>
-
-		<?php if(cfg('POST__SHOWDATEMODIFIED')) { ?>
-			<b class="post__metaItem post__dateModifiedContainer">
-				<b class="label label--postDate <?php echo $label_postDate_hidden; ?>">Modified on: </b>
-				<b class="post__date"><?php echo $post->post_modified; ?></b>
-			</b>
-		<?php } ?>
-
-		<?php if(cfg('POST__SHOWCATEGORIES')) { ?>
-			<b class="post__metaItem post__catContainer">
-				<h2 class="label label--cats"><?php echo cfg('CATEGORY__HEADERTEXT', true); ?></h2>
-					<?php 
-
-//https://codex.wordpress.org/Function_Reference/get_category
-	$all_categories = get_the_category();
-
-	echo '<ul class="post__categories">';
-	foreach($all_categories as $categories_item) {
-		if (cfg('POST__SHOW_CAT_DESC') && $categories_item->description) {
-			$cat_desc = '<b class="category__description">'.$categories_item->description.'</b>';
-			$cat__name	= '<b class="category__name"><a href="'.get_category_link($categories_item->term_id).'">'.$categories_item->cat_name.'</a></b>';
-		}
-		else $cat__name = '<a href="'.get_category_link($categories_item->term_id).'">'.$categories_item->cat_name.'</a>';
-
-		echo '<li>'.$cat__name.$cat_desc.'</li>';
-	}
-	echo '</ul>';
-
-					?>
-			</b>
-		<?php } ?>
 
 
-		<?php if(cfg('POST__SHOWTAGS') && !cfg('POST__TAGSBELOWPOST')) {
-			$tags_list = get_the_tag_list( '', __( '', 'groundwork' ) );
-			if ( $tags_list ) :
-		?>
-		<b class="post__metaItem post__tagsContainer">
-			<h2 class="label label--postTags"><?php echo TAG__HEADERTEXT; ?></h2>
-			<ul class="post__tags">
-				<?php
-				if(get_the_tag_list()) {
-				    echo get_the_tag_list('<li>','</li><li>','</li>');
-				}
-				?>			
-			</ul>
-		</b>
-		<?php endif; } ?>
-
-
-		<?php if(cfg('SHOW_COMMENTS')) { ?>
-		<b class="post__metaItem post__commentLinkContainer">
-			<b class="post__comments">
-			<?php comments_popup_link( __( cfg('COMMENT_TEXT', true), 'groundwork' ), __( cfg('COMMENT_TEXT_1COMMENT', true), 'groundwork' ), __( '%'.COMMENT_TEXT_MULTI, 'groundwork' ) ); ?>
-			</b>
-		</b>
-		<?php } ?>
-		
-		<?php edit_post_link( __( 'Edit', 'groundwork' ), '<b class="post__edit">', '</b>' ); ?>
-
-
-	<?php if(POST__GROUP_METADATA) { ?>
-		</div><!-- post__meta -->
-	<?php } ?>
 	<?php
-	if((!is_single() && (cfg('POST__FEATUREDIMAGE_ShowInList') || show_featured_image_for_this_post($post__classes) )) || cfg('POST__FEATUREDIMAGE_ShowOnSingle')) {
-		
-	 if (has_post_thumbnail()) {
-	    $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), cfg('POST__FEATUREDIMAGE_SIZE', true));
-	    
-	    ?>
-	    
-	    <div class="post__image">
-		    <?php if(!is_single()) { ?><a class="post__imageLink" href="<?php the_permalink(); ?>"><?php } ?>
-			    <img src="<?php echo $large_image_url[0]; ?>">
-		    <?php if(!is_single()) { ?></a><?php } ?>
-		    <?php if ( $caption = get_post( get_post_thumbnail_id() )->post_excerpt ) : ?>
-    <p class="caption"><?php echo $caption; ?></p>
-<?php endif; ?>
-	    </div>
-	    <?php
-		   }
-	 }
-	 ?>
-	 
+		if( get_post_type() !== 'page' ) {
+			include(get_template_directory() . '/inc/post-meta.php');
+		}
+
+		if(cfg('POST__GROUP_TITLE_AND_META')) {
+			do_action( 'gwp__headerblock_close');
+		?>
+		</div><!-- end tag for post__headerblock -->
+	<?php } ?>
+
+	<?php include(get_template_directory() . '/template-tags/featured-image.php'); ?>
+
 	 <?php
-		  if((cfg('BLOG__EXCPT_ON_HOME')) && is_home()) $only_show_excerpt_on_home = true;
-	 ?>
-	<?php if ( (is_search() || is_archive())
-		 || $only_show_excerpt_on_home) : // Only display Excerpts for Search ?>
-	<div class="entry__summary">
-		<?php the_excerpt(); ?>
-	</div><!-- .entry-summary -->
-	<?php else : ?>
+		if((cfg('BLOG__EXCPT_ON_HOME')) && is_home()) {
+			 $only_show_excerpt_on_home = true;
+		}
+
+		if ( (is_search() || is_archive()) || $only_show_excerpt_on_home ) { // Only display Excerpts for Search
+	?>
+
+			<div class="entry__summary">
+				<?php the_excerpt(); ?>
+			</div><!-- .entry-summary -->
+
+		<?php } else { ?>
+
 	<div class="entry__content">
-		<?php the_content( __( cfg('POST__READMORE_TEXT', true), 'groundwork' ) ); ?>
 		<?php
+			the_content( __( cfg('POST__READMORE_TEXT', true), 'groundwork' ) );
+			
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . __( 'Pages:', 'groundwork' ),
 				'after'  => '</div>',
 			) );
+		}
 		?>
 	</div><!-- .entry-content -->
 
-	<?php if(cfg('POST__TAGSBELOWPOST')) { ?>
+	<?php if(cfg('POST__TAGSBELOWPOST')) {
+		if(cfg('POST__SHOWTAGS')) {
 
-		<?php if(cfg('POST__SHOWTAGS')) {
-			$tags_list = get_the_tag_list( '', __( '', 'groundwork' ) );
-			if ( $tags_list ) :
+/*			$tags_list = get_the_tag_list( '', __( '', 'groundwork' ) );
+			
+			if ( $tags_list ) { */
 		?>
 		<b class="post__metaItem post__tagsContainer">
 			<h2 class="label label--postTags"><?php echo cfg('TAG__HEADERTEXT', true); ?></h2>
@@ -284,12 +221,12 @@ $hTag = "h2";
 				if(get_the_tag_list()) {
 				    echo get_the_tag_list('<li>','</li><li>','</li>');
 				}
-				?>			
+				?>
 			</ul>
 		</b>
-		<?php endif; } ?>
-			
-	<?php } ?>
-
-	<?php endif; ?>
+		<?php 
+			}
+		}
+		
+	// endif; ?>
 </article><!-- #post-## -->

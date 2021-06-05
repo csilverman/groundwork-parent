@@ -1,12 +1,19 @@
 <?php
 
 //	Here's where we set up the HTML classes.
+//	Right now, I'm just adding everything onto a string, but this
+//	should really be an array.
 
 $html__classes = 'wp no-js ';
 
+
 //	First of all: to subnav or not to subnav?
 
-if(has_subpage()) $html__classes .= ' has-subnav';
+//	If a page has subpages, subnav will automatically be shown. However,
+//	this can be overridden with a custom field of `noSubnav`, set to true.
+$no_subnav = get_post_meta($post->ID, 'noSubnav', true);
+
+if ( has_subpage() && !$no_subnav && !is_404() ) $html__classes .= ' has-subnav';
 else $html__classes .= ' no-subnav';
 
 //	Now then; do we have a sidebar or not?
@@ -20,6 +27,10 @@ else $html__classes .= ' has-sidebar';
 //	announcements, we want a more compact layout for each post similar to the standard Vassar news page.
 
 if(!is_singular() && cfg('BLOG__USE_MINIPOST')) $html__classes .= ' minimal-post-on-frontpage';
+
+if( is_404() ) $html__classes .= ' page';
+
+if(is_singular()) $html__classes .= ' is-singular';
 
 if(has_post_thumbnail()) $html__classes .= ' has-postThumbnail';
 

@@ -5,7 +5,7 @@
  * @package groundwork
  */
 ?>
-<?php if(SITE__HAS_SIDEBAR) { ?>
+<?php if(cfg('SITE__HAS_SIDEBAR')) { ?>
 	<div class="sidebar">
 		<?php do_action( 'gwp_inner_sidebar_before' ); ?>
 

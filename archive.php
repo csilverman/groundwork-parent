@@ -17,7 +17,10 @@ get_header(); ?>
 
 		<?php if ( have_posts() ) : ?>
 		
-			<?php the_archive_title( '<h1 class="u-pageTitle archives__title">', '</h1>' ); ?>
+			<?php
+				echo get_the_archive_title();
+				//	post_type_archive_title();
+			?>
 
 			<?php /* Start the Loop */ ?>
 			<?php while ( have_posts() ) : the_post(); ?>
@@ -32,8 +35,6 @@ get_header(); ?>
 
 			<?php endwhile; ?>
 
-			<?php groundwork_paging_nav(); ?>
-
 		<?php else : ?>
 
 			<?php get_template_part( 'content', 'none' ); ?>
@@ -42,9 +43,24 @@ get_header(); ?>
 
 	</div><!-- /u-lContent -->
 
-<?php
-	if(SITE__HAS_SIDEBAR) {
-		get_sidebar();
-	}
-?>
+	<?php groundwork_paging_nav(); ?>
+
+	<div class="u-lAside widget-area <?php echo $addtlClasses; ?>" role="complementary">
+		<?php
+			if(cfg('HOMEPAGE__HAS_OWNSIDEBAR')) { 
+				if ( ! dynamic_sidebar( 'sidebar-3' ) ) : ?>
+	
+			<?php endif; // end sidebar widget area ?>
+		
+		<?php }
+			else {
+				get_sidebar();
+			}
+		?>
+	</div><!-- /u-lAside -->
+</div> <!-- /u-lMain -->
+
+<?php 
+	include(get_template_directory() . '/inc/navigation.php'); ?>
+
 <?php get_footer(); ?>
