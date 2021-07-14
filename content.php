@@ -1,5 +1,5 @@
 <?php
-/** eee!
+/**
  * @package groundwork
  */
 ?>
