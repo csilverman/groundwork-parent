@@ -14,4 +14,4 @@ jobs:
         server: csilverman.dev
         username: dh_swwtsa
         password: ${{ secrets.ftp_password }}
-        server-dir: /home/dh_swwtsa/csilverman.dev
+        server-dir: /home/dh_swwtsa/csilverman.dev/
