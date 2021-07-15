@@ -1,0 +1,7 @@
+.vscode/
+coverage/
+.DS_Store
+.nyc_output
+.travis.yml
+sauce.json
+tsconfig.tsbuildinfo

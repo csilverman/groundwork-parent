@@ -1,0 +1,7 @@
+docs
+====
+
+
+ - Remove "-master" at the end of each theme folder. File names should be "groundwork-parent" and "groundwork-child".
+ - In the "header" file in the parent theme, change the include path to point to the _SETUP file in the parent theme.
+ - Download buildkit. Add to the child theme. Rename to "assets".
