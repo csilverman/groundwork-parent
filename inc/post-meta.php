@@ -66,7 +66,7 @@
 			if ( $tags_list ) :
 		?>
 		<span class="post__metaItem post__tagsContainer">
-			<h2 class="label label--postTags"><?php echo TAG__HEADERTEXT; ?></h2>
+			<h2 class="label label--postTags"><?php echo cfg('TAG__HEADERTEXT', true); ?></h2>
 			<ul class="post__tags">
 				<?php
 				if(get_the_tag_list()) {
@@ -81,7 +81,7 @@
 		<?php if(cfg('SHOW_COMMENTS')) { ?>
 		<b class="post__metaItem post__commentLinkContainer">
 			<b class="post__comments">
-			<?php comments_popup_link( __( cfg('COMMENT_TEXT', true), 'groundwork' ), __( cfg('COMMENT_TEXT_1COMMENT', true), 'groundwork' ), __( '%'.COMMENT_TEXT_MULTI, 'groundwork' ) ); ?>
+			<?php comments_popup_link( __( cfg('COMMENT_TEXT', true), 'groundwork' ), __( cfg('COMMENT_TEXT_1COMMENT', true), 'groundwork' ), __( '%'.cfg('COMMENT_TEXT_MULTI', true), 'groundwork' ) ); ?>
 			</b>
 		</b>
 		<?php } ?>
