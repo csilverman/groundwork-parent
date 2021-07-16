@@ -66,7 +66,7 @@
 			if ( $tags_list ) :
 		?>
 		<span class="post__metaItem post__tagsContainer">
-			<h2 class="label label--postTags"><?php echo TAG__HEADERTEXT; ?></h2>
+			<h2 class="label label--postTags"><?php echo cfg('TAG__HEADERTEXT', true); ?></h2>
 			<ul class="post__tags">
 				<?php
 				if(get_the_tag_list()) {

@@ -57,19 +57,7 @@ get_header();
 					} else {
 						get_template_part('template-parts/format', get_post_format());
 					}
-					
-					$post_count++;
-					if($post_count==HOMEPAGE__INLOOPCONTENT_AFTERPOST) { ?>
 
-					<div class="widget-area" role="complementary">
-						<?php if ( ! dynamic_sidebar( 'in-loop-content' ) ) : ?>
-				
-						<?php endif; // end sidebar widget area ?>
-					</div><!-- /u-lAside -->
-
-				<?php } ?>
-
-				<?php
 					/* Include the Post-Format-specific template for the content.
 					 * If you want to override this in a child theme, then include a file
 					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
