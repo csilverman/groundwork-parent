@@ -14,4 +14,4 @@ jobs:
         server: csilverman.dev
         username: dh_swwtsa
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: /csilverman.dev/wp-content/themes/devblog-gwparent/
+        server-dir: /csilverman.dev/wp-content/themes/devblog-parent/

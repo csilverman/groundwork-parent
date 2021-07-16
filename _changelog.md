@@ -1,4 +1,15 @@
-I added this to -dev: is it showing up on the main one?
+July 15, 2021 - version 0.5.2
+=============================
+
+## index.php
+* Finally removed all code for `HOMEPAGE__INLOOPCONTENT_AFTERPOST`
+
+## content.php
+* Closing bracket for the following `if` statement, ```if ( (is_search() || is_archive()) || $only_show_excerpt_on_home ) {```, came before closing `div` tag for `.entry-content` instead of after, so there was an extra closing `div` tag. This was prematurely closing `.u-lContent`, so all subsequent `article` tags in a post listing fell outside it.
+
+## inc/post-meta.php
+* Added some `cfg` functions to bare config constants
+
 
 Jun 5, 2021 - version 0.5.1
 ===========================

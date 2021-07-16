@@ -205,10 +205,11 @@ $hTag = "h2";
 				'before' => '<div class="page-links">' . __( 'Pages:', 'groundwork' ),
 				'after'  => '</div>',
 			) );
-		}
 		?>
 	</div><!-- .entry-content -->
-
+	<?php }  // end if ?>
+	
+	
 	<?php if(cfg('POST__TAGSBELOWPOST')) {
 		if(cfg('POST__SHOWTAGS')) {
 
@@ -230,5 +231,6 @@ $hTag = "h2";
 			}
 		}
 		
-	// endif; ?>
+	// endif;
+	 ?>
 </article><!-- #post-## -->
