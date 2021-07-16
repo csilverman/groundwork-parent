@@ -81,7 +81,7 @@
 		<?php if(cfg('SHOW_COMMENTS')) { ?>
 		<b class="post__metaItem post__commentLinkContainer">
 			<b class="post__comments">
-			<?php comments_popup_link( __( cfg('COMMENT_TEXT', true), 'groundwork' ), __( cfg('COMMENT_TEXT_1COMMENT', true), 'groundwork' ), __( '%'.COMMENT_TEXT_MULTI, 'groundwork' ) ); ?>
+			<?php comments_popup_link( __( cfg('COMMENT_TEXT', true), 'groundwork' ), __( cfg('COMMENT_TEXT_1COMMENT', true), 'groundwork' ), __( '%'.cfg('COMMENT_TEXT_MULTI', true), 'groundwork' ) ); ?>
 			</b>
 		</b>
 		<?php } ?>
