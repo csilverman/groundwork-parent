@@ -64,6 +64,7 @@ if (cfg('CAT__USE_NAME_OF_CAT_AS_HEADER')) {
 
 $post__title = get_the_title($post->ID);
 $post__format = get_post_format($post->ID);
+$postHasSubtitle = false;
 
 if((strpos($post__title, ":") == true) && ($post__format == "")) 
 	$postHasSubtitle = true;
@@ -184,6 +185,7 @@ $hTag = "h2";
 	<?php include(get_template_directory() . '/template-tags/featured-image.php'); ?>
 
 	 <?php
+ 		$only_show_excerpt_on_home = false;
 		if((cfg('BLOG__EXCPT_ON_HOME')) && is_home()) {
 			 $only_show_excerpt_on_home = true;
 		}

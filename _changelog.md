@@ -1,3 +1,11 @@
+July 16, 2023 - version 0.5.3
+=============================
+
+## content.php and functions.php
+
+* Defined several variables before referring to them. This was throwing warnings.
+
+
 July 15, 2021 - version 0.5.2
 =============================
 

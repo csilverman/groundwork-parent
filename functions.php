@@ -481,6 +481,7 @@ function show_featured_image_for_this_post($post__classes) {
 }
 
 function socialcard($arr) {
+	$markup = '';
 	foreach ($arr as $key => $value) {
 		$markup .= PHP_EOL;
 		
@@ -577,6 +578,9 @@ function formatPostClasses($classes) {
 	/*	This accepts a series of space-delimited classes (class1 class2)
 		and returns them BEM-formatted (post--class1 post--class2)
 	*/
+
+	$final_classes = '';
+
 	$classes = explode(" ", $classes);
 	for ($i=0;$i<count($classes);$i++) {
 		$final_classes .= " post--".$classes[$i];
